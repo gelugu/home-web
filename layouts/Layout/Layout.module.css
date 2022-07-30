@@ -1,0 +1,27 @@
+.layout {
+  display: flex;
+  flex-direction: column;
+
+  height: 100vh;
+}
+
+.header {
+  grid-area: "header";
+}
+
+.body {
+  height: 100%;
+
+  padding: 1rem;
+}
+
+.info-container {
+  position: absolute;
+  right: 1rem;
+  bottom: 2rem;
+
+  display: flex;
+  align-items: flex-end;
+  flex-direction: column;
+  justify-content: flex-end;
+}
