@@ -3,7 +3,8 @@ export const routes = {
 
   profile: "/profile",
 
-  login: "/auth/login",
+  login: "/login",
+  registration: "/registration",
 
   tasks: "/tasks",
   tasksCreate: "/tasks/create",
@@ -12,6 +13,11 @@ export const routes = {
 export const apiRoutes = {
   root: "/",
 
+  status: "/status",
+  registerBot: "/register/bot",
+  registerChat: "/register/chat",
+
+  sendCode: "/send-code",
   login: "/login",
 
   tasks: "/tasks",

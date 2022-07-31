@@ -23,7 +23,7 @@ function MyApp({
         <link key={0} rel="icon" href="/favicon.ico" />
       </Head>
       <ThemeProvider theme={theme}>
-        <AppContextProvider token={undefined}>
+        <AppContextProvider token="" setToken={() => {}}>
           <CssBaseline />
           <Component {...pageProps} />
         </AppContextProvider>

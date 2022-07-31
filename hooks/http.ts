@@ -7,6 +7,9 @@ import {
   LoginResponseDto,
   CreateTaskDto,
   UpdateTaskDto,
+  TelegramUserDto,
+  TokenDto,
+  ChatDto,
 } from "../interfaces/dto";
 
 export const useHttp = (token?: string) => {
@@ -54,8 +57,21 @@ export const useHttp = (token?: string) => {
   };
 
   /**
+   * Registration
+   */
+  const status = async () => get(apiRoutes.status);
+  const registerBot = async (token: string) => post<TelegramUserDto>(
+    apiRoutes.registerBot, { token }
+  );
+  const registerChat = async (chat: string) => post<TelegramUserDto>(
+    apiRoutes.registerChat, { chat }
+  );
+  const getChat = async () => get<TelegramUserDto>(apiRoutes.registerChat);
+
+  /**
    * Login
    */
+  const sendCode = async () => get(apiRoutes.sendCode);
   const login = async (loginDto: LoginDto) => post<LoginResponseDto>(apiRoutes.login, loginDto);
 
   /**
@@ -69,6 +85,11 @@ export const useHttp = (token?: string) => {
   const deleteTask = (id: string) => remove<Task>(apiRoutes.tasks, id);
 
   return {
+    status,
+    registerBot,
+    registerChat,
+    getChat,
+    sendCode,
     login,
     createTask,
     updateTask,

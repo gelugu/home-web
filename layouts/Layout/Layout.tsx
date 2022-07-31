@@ -1,4 +1,4 @@
-import { FunctionComponent, useEffect, useState } from "react";
+import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import cn from "classnames";
 
@@ -10,16 +10,18 @@ import { Header } from "../../components";
 
 import styles from "./Layout.module.css";
 import { routes } from "../../config";
+import { AppContext } from "../../context/app";
 
 const Layout = ({ children }: LayoutProps): JSX.Element => {
   const layoutStyle = cn(styles.layout);
 
+  const { token } = useContext(AppContext);
   const { push } = useRouter();
 
   const [loading, setLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    if (!localStorage.getItem("token")) {
+    if (token === "") {
       setLoading(true);
       push(routes.login);
     } else setLoading(false);

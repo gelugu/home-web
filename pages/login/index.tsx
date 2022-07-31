@@ -2,10 +2,7 @@ import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import { useSnackbar } from "notistack";
 
-import {
-  Container,
-  Grid,
-} from "@mui/material";
+import { Container, Grid } from "@mui/material";
 
 import { Input } from "../../components";
 
@@ -17,15 +14,30 @@ export default function Login(): JSX.Element {
   const { push } = useRouter();
   const { enqueueSnackbar } = useSnackbar();
   const { setToken } = useContext(AppContext);
-  const { login } = useHttp();
+  const { status, sendCode, login } = useHttp();
 
   const [code, setCode] = useState<string>("");
 
   useEffect(() => {
+    status().catch(({ response }) => {
+      const { data } = response;
+      if (
+        data.message === "No telegram bot token" ||
+        data.message === "No telegram chat id"
+      )
+        push(routes.registration);
+    });
+    sendCode().catch(({ response }) => {
+      const { data } = response;
+      enqueueSnackbar(data.message, { variant: "error" });
+    });
+  }, []);
+
+  useEffect(() => {
     if (code.length === 4)
       login({ code })
-        .then(({data}) => {
-          setToken && setToken(data.token)
+        .then(({ data }) => {
+          setToken(data.token);
           push(routes.root);
         })
         .catch(({ message }) => {
