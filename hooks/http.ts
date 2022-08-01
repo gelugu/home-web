@@ -79,9 +79,9 @@ export const useHttp = (token?: string) => {
    */
   const getTasks = () => get<Task[]>(apiRoutes.tasks);
   const getTask = (id: string) => get<Task>(`${apiRoutes.tasks}/${id}`);
-  const createTask = (body: Task) => post<Task>(apiRoutes.tasks, body);
+  const createTask = (body: CreateTaskDto) => post<Task>(apiRoutes.tasks, body);
   const updateTask = (id: string, body: UpdateTaskDto) =>
-    put<UpdateTaskDto>(apiRoutes.tasks, id, body);
+    put<Task>(apiRoutes.tasks, id, body);
   const deleteTask = (id: string) => remove<Task>(apiRoutes.tasks, id);
 
   return {

@@ -1,26 +1,27 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 
 import {
   Button,
   ButtonGroup,
-  CircularProgress,
-  Container,
-  Grid,
+  Card,
+  CardContent,
+  LinearProgress,
+  Stack,
   Typography,
 } from "@mui/material";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import ChatIcon from "@mui/icons-material/Chat";
 
-import { Input, Spacer } from "../../components";
+import { Center, Input, Spacer } from "../../components";
 
 import { useHttp } from "../../hooks/http";
 import { routes } from "../../config";
+import { AppContext } from "../../context/app";
 
 export default function Login(): JSX.Element {
   const { push } = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
+  const { error } = useContext(AppContext);
   const { status, registerBot, registerChat, getChat } = useHttp();
 
   const [token, setToken] = useState<string>("");
@@ -33,10 +34,13 @@ export default function Login(): JSX.Element {
 
   useEffect(() => {
     status().catch(({ response }) => {
-      const { data } = response;
-      if (data.message === "No telegram bot token") {
+      if (response.data === "No telegram bot token") {
+        setTokenConfirmed(false);
       }
-      if (data.message === "No telegram chat id") {
+      if (response.data === "No telegram chat id") {
+        setTokenConfirmed(true);
+        setLoading(true);
+        getLastChatId();
       }
     });
   }, []);
@@ -54,7 +58,7 @@ export default function Login(): JSX.Element {
       })
       .catch(({ response }) => {
         const { data } = response;
-        enqueueSnackbar(data.message, { variant: "error" });
+        error(data.message);
         setTokenConfirmed(false);
       })
       .finally(() => setLoading(false));
@@ -67,7 +71,7 @@ export default function Login(): JSX.Element {
       })
       .catch(({ response }) => {
         const { data } = response;
-        enqueueSnackbar(data.message, { variant: "error" });
+        error(data.message);
       });
   }, [chat]);
 
@@ -81,63 +85,57 @@ export default function Login(): JSX.Element {
       })
       .catch(({ response }) => {
         const { data } = response;
-        enqueueSnackbar(data.message, { variant: "error" });
+        error(data.message);
       })
       .finally(() => setLoading(false));
   }, []);
 
   return (
-    <Container>
-      <Grid container spacing={3}>
-        {/* ToDo: handle center component */}
-        <Spacer xs={12} />
-        <Spacer xs={12} />
-        <Spacer xs={12} />
-        <Spacer xs={12} />
-        <Spacer xs={12} />
-        <Spacer xs={12} />
-
-        <Grid item xs={1}>
-          <TelegramIcon
-            fontSize="large"
-            color={tokenConfirmed ? "success" : "inherit"}
-          />
-        </Grid>
-        <Grid item xs={6}>
-          <Input
-            value={token}
-            label="Telegram bot token"
-            // ToDo: bug - onChange don\'t work when paste token
-            onChange={(e) => setToken(e.target.value)}
-          />
-        </Grid>
-        <Grid item xs={2}>
-          <Button onClick={sendToken}>Connect</Button>
-        </Grid>
-        <Spacer xs={2} />
-
-        {tokenConfirmed && (
+    <Center>
+      <Card>
+        {tokenConfirmed ? (
           <>
-            <Grid item xs={2}>
-              <ChatIcon color="inherit" />
-            </Grid>
-            <Grid item xs={3}>
-              <Typography>Are you {username}?</Typography>
-            </Grid>
-            <Grid item xs={3}>
-              {loading ? (
-                <CircularProgress />
-              ) : (
-                <ButtonGroup>
-                  <Button onClick={confirmUsername}>Yes</Button>
-                  <Button onClick={getLastChatId}>No</Button>
-                </ButtonGroup>
-              )}
-            </Grid>
-            <Spacer xs={4} />
+            {username && (
+              <CardContent>
+                <Stack direction="row" spacing={2} alignItems="center">
+                  <ChatIcon color="inherit" />
+                  <Typography>Are you {username}?</Typography>
+                  <ButtonGroup>
+                    <Button onClick={confirmUsername}>Yes</Button>
+                    <Button onClick={getLastChatId}>No</Button>
+                  </ButtonGroup>
+                </Stack>
+              </CardContent>
+            )}
+            <CardContent>
+              <Typography>
+                Please, send a message to your bot to help as identify your chat
+                id.
+              </Typography>
+            </CardContent>
           </>
+        ) : (
+          <CardContent>
+            <Stack direction="row" spacing={2} alignItems="center">
+              <TelegramIcon
+                fontSize="large"
+                color={tokenConfirmed ? "success" : "inherit"}
+              />
+              <Input
+                value={token}
+                label="Telegram bot token"
+                fullWidth
+                type="password"
+                onChange={(e) => setToken(e.target.value)}
+              />
+              <Button onClick={sendToken} variant="outlined">
+                Connect
+              </Button>
+            </Stack>
+          </CardContent>
         )}
-      </Grid>
-    </Container>
+        <CardContent>{loading && <LinearProgress />}</CardContent>
+      </Card>
+    </Center>
   );
 }

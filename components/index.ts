@@ -10,3 +10,4 @@ export * from "./Link/Link";
 export * from "./List/List";
 export * from "./Button/Button";
 export * from "./Autocomplete/Autocomplete";
+export * from "./Center/Center";

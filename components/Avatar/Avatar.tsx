@@ -15,7 +15,7 @@ import AccountCircleIcon from "@mui/icons-material/AccountCircle";
 
 import { AppContext } from "../../context/app";
 
-import { localStorageConfig, routes } from "../../config";
+import { routes } from "../../config";
 
 export const Avatar = (): JSX.Element => {
   const { push } = useRouter();
@@ -32,8 +32,9 @@ export const Avatar = (): JSX.Element => {
   };
 
   const signOut = () => {
-    localStorage.removeItem(localStorageConfig.token);
-    setToken && setToken(undefined);
+    localStorage.removeItem("token")
+    setToken("")
+    push(routes.login);
   };
   const signIn = () => {
     push(routes.login);
@@ -76,7 +77,7 @@ export const Avatar = (): JSX.Element => {
         </>
       ) : (
         <Button color="inherit" onClick={() => signIn()}>
-          Войти
+          Login
         </Button>
       )}
     </Box>

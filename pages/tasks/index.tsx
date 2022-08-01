@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
-import { LinearProgress, Typography } from "@mui/material";
+import { LinearProgress, Typography, Checkbox } from "@mui/material";
 
 import { AddFab, Input, Table, Link, List } from "../../components";
 
@@ -10,12 +9,10 @@ import { AppContext } from "../../context/app";
 import { useHttp } from "../../hooks/http";
 import { Task } from "../../interfaces";
 import { withLayout } from "../../layouts";
-import { tasks as text } from "../../text";
 
 function Tasks(): JSX.Element {
   const { push } = useRouter();
-  const { enqueueSnackbar } = useSnackbar();
-  const { token } = useContext(AppContext);
+  const { token, error } = useContext(AppContext);
   const { getTasks } = useHttp(token);
 
   const [loading, setLoading] = useState<boolean>(true);
@@ -29,9 +26,7 @@ function Tasks(): JSX.Element {
         setTasks(data);
       })
       .catch(({ message }) => {
-        enqueueSnackbar(`Can't load tasks\n${message}`, {
-          variant: "error",
-        });
+        error(`Can't load tasks\n${message}`);
       })
       .finally(() => {
         setLoading(false);
@@ -45,7 +40,7 @@ function Tasks(): JSX.Element {
       )
       .map((task) => {
         const taskName = (
-          <Link href={`${routes.tasks}/${task._id}`}>{task.name}</Link>
+          <Link href={`${routes.tasks}/${task.id}`}>{task.name}</Link>
         );
 
         const taskDescription = (
@@ -53,13 +48,13 @@ function Tasks(): JSX.Element {
         );
 
         const taskStatus = (
-          <Typography>{task.open}</Typography>
+          <Checkbox checked={!task.open} />
         );
 
         return {
-          values: [taskName, taskDescription, taskStatus],
-          key: task._id || "",
-          onClick: () => push(`${routes.tasks}/${task._id}`),
+          values: [taskStatus, taskName, taskDescription],
+          key: task.id || "",
+          onClick: () => push(`${routes.tasks}/${task.id}`),
         };
       });
   }, [tasks, searchQuery]);
@@ -81,9 +76,9 @@ function Tasks(): JSX.Element {
       <Table
         name="Tasks"
         columns={[
-          { value: "Status", key: "task-status", size: 4 },
-          { value: "Name", key: "task-name", size: 4 },
-          { value: "Description", key: "task-description", size: 4 },
+          { value: "Status", key: "task-status", size: 1 },
+          { value: "Name", key: "task-name", size: 3 },
+          { value: "Description", key: "task-description", size: 8 },
         ]}
         rows={getGroupsRows()}
       />

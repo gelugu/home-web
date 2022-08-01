@@ -24,7 +24,9 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
     if (token === "") {
       setLoading(true);
       push(routes.login);
-    } else setLoading(false);
+    } else {
+      setLoading(false)
+    };
   }, []);
 
   const pages = [{ name: "Tasks", route: routes.tasks }];

@@ -46,13 +46,13 @@ export const List = (props: ListProps): JSX.Element => {
       visibleElements && visibleElements < elements ? (
         <Button onClick={expand}>
           <Container>
-            <FaArrowDown /> показать больше
+            <FaArrowDown /> more...
           </Container>
         </Button>
       ) : (
         <Button onClick={collaps}>
           <Container>
-            <FaArrowUp /> свернуть
+            <FaArrowUp /> less
           </Container>
         </Button>
       );

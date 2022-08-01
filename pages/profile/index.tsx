@@ -1,14 +1,8 @@
-import { useSnackbar } from "notistack";
-
-import { Grid, LinearProgress, Typography } from "@mui/material";
+import { Grid, Typography } from "@mui/material";
 
 import { withLayout } from "../../layouts";
 
 const Profile = (): JSX.Element => {
-  const { enqueueSnackbar } = useSnackbar();
-
-  if (false) return <LinearProgress />;
-
   return (
     <>
       <Typography variant="h4">In progress...</Typography>
