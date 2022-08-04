@@ -1,19 +1,21 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import {
-  Button,
-  ButtonGroup,
-  Card,
-  CardContent,
-  LinearProgress,
-  Stack,
-  Typography,
-} from "@mui/material";
 import TelegramIcon from "@mui/icons-material/Telegram";
 import ChatIcon from "@mui/icons-material/Chat";
-
-import { Center, Input, Spacer } from "../../components";
+import {
+  Button,
+  InputGroup,
+  InputLeftAddon,
+  Input,
+  ButtonGroup,
+  Center,
+  Stack,
+  Box,
+  Text,
+  Icon,
+  Tooltip,
+} from "@chakra-ui/react";
 
 import { useHttp } from "../../hooks/http";
 import { routes } from "../../config";
@@ -24,7 +26,9 @@ export default function Login(): JSX.Element {
   const { error } = useContext(AppContext);
   const { status, registerBot, registerChat, getChat } = useHttp();
 
-  const [token, setToken] = useState<string>("");
+  const [token, setToken] = useState<string>(
+    "5062430827:AAGrmdPhKTG_FZgfC1dn-rwz_i1Z6tXTRcc"
+  );
   const [tokenConfirmed, setTokenConfirmed] = useState<boolean>(false);
 
   const [chat, setChat] = useState<string>("");
@@ -52,8 +56,8 @@ export default function Login(): JSX.Element {
 
     registerBot(token)
       .then(({ data }) => {
-        setUsername(data.username);
-        setChat(data.chat);
+        setUsername(`${data.username}`);
+        setChat(data.id.toString());
         setTokenConfirmed(true);
       })
       .catch(({ response }) => {
@@ -81,7 +85,7 @@ export default function Login(): JSX.Element {
     getChat()
       .then(({ data }) => {
         setUsername(data.username);
-        setChat(data.chat);
+        setChat(data.id.toString());
       })
       .catch(({ response }) => {
         const { data } = response;
@@ -91,51 +95,55 @@ export default function Login(): JSX.Element {
   }, []);
 
   return (
-    <Center>
-      <Card>
+    <Center h="80vh">
+      <Box>
         {tokenConfirmed ? (
           <>
             {username && (
-              <CardContent>
+              <Box>
                 <Stack direction="row" spacing={2} alignItems="center">
                   <ChatIcon color="inherit" />
-                  <Typography>Are you {username}?</Typography>
+                  <Text>Are you {username}?</Text>
                   <ButtonGroup>
-                    <Button onClick={confirmUsername}>Yes</Button>
-                    <Button onClick={getLastChatId}>No</Button>
+                    <Button onClick={confirmUsername} isLoading={loading}>
+                      Yes, I am!
+                    </Button>
+                    <Button onClick={getLastChatId} isLoading={loading}>
+                      No, go check again!
+                    </Button>
                   </ButtonGroup>
                 </Stack>
-              </CardContent>
+              </Box>
             )}
-            <CardContent>
-              <Typography>
-                Please, send a message to your bot to help as identify your chat
-                id.
-              </Typography>
-            </CardContent>
+            <Box>
+              <Text>
+                If not, please send a message to your bot to help as identify
+                your chat id.
+              </Text>
+            </Box>
           </>
         ) : (
-          <CardContent>
-            <Stack direction="row" spacing={2} alignItems="center">
-              <TelegramIcon
-                fontSize="large"
-                color={tokenConfirmed ? "success" : "inherit"}
-              />
-              <Input
-                value={token}
-                label="Telegram bot token"
-                fullWidth
-                type="password"
-                onChange={(e) => setToken(e.target.value)}
-              />
-              <Button onClick={sendToken} variant="outlined">
-                Connect
-              </Button>
-            </Stack>
-          </CardContent>
+          <Stack direction="row" spacing={2} alignItems="center">
+            <Tooltip label="We send invocation code to this bot">
+              <InputGroup>
+                <InputLeftAddon>
+                  <Icon as={TelegramIcon} />
+                </InputLeftAddon>
+                <Input
+                  value={token}
+                  placeholder="Telegram bot token"
+                  type="password"
+                  onChange={(e) => setToken(e.target.value)}
+                  disabled={loading}
+                />
+              </InputGroup>
+            </Tooltip>
+            <Button onClick={sendToken} variant="solid" isLoading={loading}>
+              Connect
+            </Button>
+          </Stack>
         )}
-        <CardContent>{loading && <LinearProgress />}</CardContent>
-      </Card>
+      </Box>
     </Center>
   );
 }

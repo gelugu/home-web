@@ -8,8 +8,6 @@ import {
   CreateTaskDto,
   UpdateTaskDto,
   TelegramUserDto,
-  TokenDto,
-  ChatDto,
 } from "../interfaces/dto";
 
 export const useHttp = (token?: string) => {

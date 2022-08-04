@@ -1,4 +1,6 @@
 export interface TelegramUserDto {
-  username: string,
-  chat: string
+  id: number;
+  first_name: string;
+  last_name: string;
+  username: string;
 }

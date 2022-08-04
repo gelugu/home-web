@@ -1,5 +1,5 @@
 export const routes = {
-  root: "/tasks",
+  root: "/",
 
   profile: "/profile",
 

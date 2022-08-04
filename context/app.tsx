@@ -1,16 +1,18 @@
 import { createContext, PropsWithChildren, useCallback } from "react";
-import { SnackbarKey, useSnackbar } from "notistack";
+import { ToastId, useToast } from "@chakra-ui/react";
 
 export interface IAppContext {
   token: string;
   setToken: (token: string) => void;
-  error: (message: string) => SnackbarKey;
+  error: (title: string, description?: string) => ToastId;
+  success: (title: string, description?: string) => ToastId;
 }
 
 export const AppContext = createContext<IAppContext>({
   token: "",
   setToken: () => {},
   error: () => "",
+  success: () => "",
 });
 
 export const AppContextProvider = ({
@@ -18,10 +20,31 @@ export const AppContextProvider = ({
   token,
   setToken,
 }: PropsWithChildren<IAppContext>): JSX.Element => {
-  const { enqueueSnackbar } = useSnackbar();
+  const toast = useToast();
+
+  const defaultToastTime = 5000
 
   const error = useCallback(
-    (message: string) => enqueueSnackbar(message, { variant: "error" }),
+    (title: string, description: string = "") =>
+      toast({
+        title,
+        description,
+        status: "error",
+        duration: defaultToastTime,
+        isClosable: true,
+      }),
+    []
+  );
+
+  const success = useCallback(
+    (title: string, description: string = "") =>
+      toast({
+        title,
+        description,
+        status: "success",
+        duration: defaultToastTime,
+        isClosable: true,
+      }),
     []
   );
 
@@ -31,6 +54,7 @@ export const AppContextProvider = ({
         token,
         setToken,
         error,
+        success,
       }}
     >
       {children}

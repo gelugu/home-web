@@ -1,10 +1,14 @@
 import { useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import { useSnackbar } from "notistack";
 
-import { Card, CardContent } from "@mui/material";
-
-import { Center, Input } from "../../components";
+import {
+  Box,
+  Center,
+  HStack,
+  PinInput,
+  PinInputField,
+  Tooltip,
+} from "@chakra-ui/react";
 
 import { useHttp } from "../../hooks/http";
 import { routes } from "../../config";
@@ -44,16 +48,19 @@ export default function Login(): JSX.Element {
   }, [code]);
 
   return (
-    <Center>
-      <Card>
-        <CardContent>
-          <Input
-            value={code}
-            label="Invitation code"
-            onChange={(e) => setCode(e.target.value)}
-          />
-        </CardContent>
-      </Card>
+    <Center h="80vh">
+      <Box>
+        <HStack>
+          <Tooltip label="Invitation code, check telegram bot">
+            <PinInput value={code} onChange={(e) => setCode(e)} autoFocus>
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+              <PinInputField />
+            </PinInput>
+          </Tooltip>
+        </HStack>
+      </Box>
     </Center>
   );
 }

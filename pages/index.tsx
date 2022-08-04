@@ -1,9 +1,8 @@
-import { Container } from "@mui/material";
+import { Container } from "@chakra-ui/react";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
-import { Link } from "../components";
+import Tasks from "../components/Tasks/Tasks";
 import { routes } from "../config";
-import { withLayout } from "../layouts";
 
 function Home(): JSX.Element {
   const { push } = useRouter();
@@ -12,9 +11,9 @@ function Home(): JSX.Element {
   });
   return (
     <Container>
-      <p>Dashboard in progress...</p>
+      <Tasks />
     </Container>
   );
 }
 
-export default withLayout(Home);
+export default Home;

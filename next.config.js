@@ -1,5 +1,5 @@
 module.exports = {
-  reactStrictMode: true,
+  reactStrictMode: false, // react components render twice when "true"
   webpack(config) {
     config.module.rules.push({
       test: /\.svg$/,

@@ -1,20 +1,13 @@
 import { FunctionComponent, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
-import cn from "classnames";
+import { PropsWithChildren } from "react";
 
-import { Container, LinearProgress } from "@mui/material";
+import { Container, Progress } from "@chakra-ui/react";
 
-import { LayoutProps } from "./Layout.props";
-
-import { Header } from "../../components";
-
-import styles from "./Layout.module.css";
 import { routes } from "../../config";
 import { AppContext } from "../../context/app";
 
-const Layout = ({ children }: LayoutProps): JSX.Element => {
-  const layoutStyle = cn(styles.layout);
-
+const Layout = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const { token } = useContext(AppContext);
   const { push } = useRouter();
 
@@ -25,20 +18,15 @@ const Layout = ({ children }: LayoutProps): JSX.Element => {
       setLoading(true);
       push(routes.login);
     } else {
-      setLoading(false)
-    };
+      setLoading(false);
+    }
   }, []);
 
   const pages = [{ name: "Tasks", route: routes.tasks }];
 
   return (
-    <div className={layoutStyle}>
-      <Header logo="Home" pages={pages} />
-      {loading ? (
-        <LinearProgress />
-      ) : (
-        <Container sx={{ padding: 2 }}>{children}</Container>
-      )}
+    <div>
+      {loading ? <Progress /> : <Container>{children}</Container>}
     </div>
   );
 };

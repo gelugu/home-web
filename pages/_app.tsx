@@ -1,25 +1,15 @@
+import { useEffect, useState } from "react";
 import Head from "next/head";
 import { AppProps } from "next/dist/shared/lib/router/router";
-import { createTheme, ThemeProvider } from "@mui/material/styles";
-import CssBaseline from "@mui/material/CssBaseline";
-import { SnackbarProvider } from "notistack";
+import { Center, ChakraProvider, CircularProgress } from "@chakra-ui/react";
 
 import { AppContextProvider } from "../context/app";
-import { yellow } from "@mui/material/colors";
-import { useEffect, useState } from "react";
-import { LinearProgress } from "@mui/material";
+import { theme } from "../config";
 
 function MyApp({
   Component,
   pageProps: { ...pageProps },
 }: AppProps): JSX.Element {
-  const theme = createTheme({
-    palette: {
-      mode: "dark",
-      primary: yellow,
-    },
-  });
-
   const [loading, setLoading] = useState(true);
   const [token, setToken] = useState("");
 
@@ -36,22 +26,22 @@ function MyApp({
         <meta name="description" content="Home" />
         <link key={0} rel="icon" href="/favicon.ico" />
       </Head>
-      <ThemeProvider theme={theme}>
-        <CssBaseline />
+      <ChakraProvider theme={theme} cssVarsRoot="body">
         {loading ? (
-          <LinearProgress />
+          <Center h="100vh">
+            <CircularProgress isIndeterminate />
+          </Center>
         ) : (
-          <SnackbarProvider maxSnack={5}>
-            <AppContextProvider
-              token={token}
-              setToken={setToken}
-              error={() => ""}
-            >
-              <Component {...pageProps} />
-            </AppContextProvider>
-          </SnackbarProvider>
+          <AppContextProvider
+            token={token}
+            setToken={setToken}
+            error={() => ""}
+            success={() => ""}
+          >
+            <Component {...pageProps} />
+          </AppContextProvider>
         )}
-      </ThemeProvider>
+      </ChakraProvider>
     </>
   );
 }

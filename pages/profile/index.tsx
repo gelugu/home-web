@@ -1,13 +1,12 @@
-import { Grid, Typography } from "@mui/material";
+import { Text, Center } from "@chakra-ui/react";
 
 import { withLayout } from "../../layouts";
 
 const Profile = (): JSX.Element => {
   return (
-    <>
-      <Typography variant="h4">In progress...</Typography>
-      <Grid container spacing={3} sx={{ mt: 3 }}></Grid>
-    </>
+    <Center h="80vh">
+      <Text>In progress...</Text>
+    </Center>
   );
 };
 
