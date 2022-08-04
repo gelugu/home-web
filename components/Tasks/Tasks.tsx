@@ -21,8 +21,7 @@ import {
   PopoverHeader,
   PopoverBody,
 } from "@chakra-ui/react";
-import SearchIcon from "@mui/icons-material/Search";
-import CloseIcon from "@mui/icons-material/Close";
+import {SearchIcon, CloseIcon} from "../../src/icons";
 
 import { Task as TaskComponent } from "../../components";
 

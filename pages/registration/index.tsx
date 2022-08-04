@@ -1,8 +1,7 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import TelegramIcon from "@mui/icons-material/Telegram";
-import ChatIcon from "@mui/icons-material/Chat";
+import { TelegramIcon, ChatIcon } from "../../src/icons";
 import {
   Button,
   InputGroup,
@@ -26,9 +25,7 @@ export default function Login(): JSX.Element {
   const { error } = useContext(AppContext);
   const { status, registerBot, registerChat, getChat } = useHttp();
 
-  const [token, setToken] = useState<string>(
-    "5062430827:AAGrmdPhKTG_FZgfC1dn-rwz_i1Z6tXTRcc"
-  );
+  const [token, setToken] = useState<string>("");
   const [tokenConfirmed, setTokenConfirmed] = useState<boolean>(false);
 
   const [chat, setChat] = useState<string>("");
@@ -102,7 +99,7 @@ export default function Login(): JSX.Element {
             {username && (
               <Box>
                 <Stack direction="row" spacing={2} alignItems="center">
-                  <ChatIcon color="inherit" />
+                  <Icon as={ChatIcon} />
                   <Text>Are you {username}?</Text>
                   <ButtonGroup>
                     <Button onClick={confirmUsername} isLoading={loading}>

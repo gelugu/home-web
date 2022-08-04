@@ -11,10 +11,9 @@ import {
   HStack,
   useEditableControls,
   ButtonGroup,
+  Icon,
 } from "@chakra-ui/react";
-import ArrowDownwardIcon from "@mui/icons-material/ArrowDownward";
-import EditIcon from "@mui/icons-material/Edit";
-import CloseIcon from "@mui/icons-material/Close";
+import { ArrowDownIcon, CloseIcon, EditIcon } from "../../src/icons";
 
 import { Task } from "../../interfaces";
 import { TaskProps } from "./Task.props";
@@ -32,10 +31,10 @@ export function Task({ task: propTask }: TaskProps): JSX.Element {
       isEditing && (
         <ButtonGroup justifyContent="center" size="sm">
           <Button size="sm" {...getSubmitButtonProps()}>
-            <EditIcon fontSize="small" />
+            <Icon as={EditIcon}/>
           </Button>
           <Button size="sm" {...getCancelButtonProps()}>
-            <CloseIcon fontSize="small" />
+            <Icon as={CloseIcon}/>
           </Button>
         </ButtonGroup>
       )
@@ -63,8 +62,8 @@ export function Task({ task: propTask }: TaskProps): JSX.Element {
           </Editable>
         </HStack>
         <Button size="sm" onClick={() => setOpen(!open)}>
-          <ArrowDownwardIcon
-            fontSize="small"
+          <Icon
+            as={ArrowDownIcon}
             sx={{
               transform: open ? "rotate(0.5turn)" : "",
               transition: "transform 200ms",
