@@ -4,8 +4,8 @@ import { PropsWithChildren } from "react";
 
 import { Container, Progress } from "@chakra-ui/react";
 
-import { routes } from "../../config";
-import { AppContext } from "../../context/app";
+import { routes } from "../../../app/config";
+import { AppContext } from "../../../app/context";
 
 const Layout = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const { token } = useContext(AppContext);
@@ -25,9 +25,7 @@ const Layout = ({ children }: PropsWithChildren<{}>): JSX.Element => {
   const pages = [{ name: "Tasks", route: routes.tasks }];
 
   return (
-    <div>
-      {loading ? <Progress /> : <Container>{children}</Container>}
-    </div>
+    <div>{loading ? <Progress /> : <Container>{children}</Container>}</div>
   );
 };
 

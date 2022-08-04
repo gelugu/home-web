@@ -22,7 +22,7 @@ export const AppContextProvider = ({
 }: PropsWithChildren<IAppContext>): JSX.Element => {
   const toast = useToast();
 
-  const defaultToastTime = 5000
+  const defaultToastTime = 5000;
 
   const error = useCallback(
     (title: string, description: string = "") =>

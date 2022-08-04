@@ -1,4 +1,4 @@
-import { useContext, useState } from "react";
+import { useContext, useState, useCallback, useRef } from "react";
 import {
   Button,
   ButtonGroup,
@@ -13,17 +13,15 @@ import {
   PopoverFooter,
 } from "@chakra-ui/react";
 
-import { CreateTaskDto } from "../../interfaces/dto";
-import { AppContext } from "../../context/app";
-import { useHttp } from "../../hooks/http";
-import { useCallback } from "react";
-import { useRef } from "react";
+import { CreateTaskDto } from "../../../app/interfaces";
+import { AppContext } from "../../../app/context";
+import { useHttp } from "../../../app/hooks";
 
 export function NewTask(): JSX.Element {
   const { token, error, success } = useContext(AppContext);
   const { createTask } = useHttp(token);
 
-  const popoverRef = useRef()
+  const popoverRef = useRef();
 
   const [loading, setLoading] = useState(false);
 

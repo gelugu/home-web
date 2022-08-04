@@ -1,7 +1,5 @@
 import { Text, Center } from "@chakra-ui/react";
 
-import { withLayout } from "../../layouts";
-
 const Profile = (): JSX.Element => {
   return (
     <Center h="80vh">
@@ -10,4 +8,4 @@ const Profile = (): JSX.Element => {
   );
 };
 
-export default withLayout(Profile);
+export default Profile;

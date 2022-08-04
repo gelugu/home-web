@@ -3,8 +3,8 @@ import Head from "next/head";
 import { AppProps } from "next/dist/shared/lib/router/router";
 import { Center, ChakraProvider, CircularProgress } from "@chakra-ui/react";
 
-import { AppContextProvider } from "../context/app";
-import { theme } from "../config";
+import { AppContextProvider } from "../src/app/context";
+import { theme } from "../src/app/config";
 
 function MyApp({
   Component,

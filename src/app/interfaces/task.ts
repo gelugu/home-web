@@ -1,6 +1,6 @@
 export interface Task {
-  id: string
+  id: string;
   name: string;
   description: string;
-  open: boolean
+  open: boolean;
 }

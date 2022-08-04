@@ -1,7 +1,7 @@
 export interface LoginDto {
-  code: string
+  code: string;
 }
 
 export interface LoginResponseDto {
-  token: string
+  token: string;
 }

@@ -1,38 +1,22 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 import {
-  Accordion,
   Progress,
   Input,
-  Button,
   Box,
-  Container,
-  Center,
   Stack,
   Collapse,
-  InputGroup,
-  InputRightAddon,
   StackDivider,
-  Popover,
-  PopoverTrigger,
-  PopoverContent,
-  PopoverArrow,
-  PopoverCloseButton,
-  PopoverHeader,
-  PopoverBody,
 } from "@chakra-ui/react";
-import {SearchIcon, CloseIcon} from "../../src/icons";
 
 import { Task as TaskComponent } from "../../components";
 
-import { routes } from "../../config";
-import { AppContext } from "../../context/app";
-import { useHttp } from "../../hooks/http";
-import { Task } from "../../interfaces";
+import { AppContext } from "../../../app/context";
+import { useHttp } from "../../../app/hooks";
+import { Task } from "../../../app/interfaces";
 import { NewTask } from "../NewTask/NewTask";
 
-function Tasks(): JSX.Element {
-  const { push } = useRouter();
+export function Tasks(): JSX.Element {
   const { token, error } = useContext(AppContext);
   const { getTasks } = useHttp(token);
 
@@ -40,7 +24,6 @@ function Tasks(): JSX.Element {
 
   const [tasks, setTasks] = useState<Task[]>([]);
 
-  const [searchOpen, setSearchOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>("");
 
   useEffect(() => {
@@ -86,5 +69,3 @@ function Tasks(): JSX.Element {
     </Stack>
   );
 }
-
-export default Tasks;

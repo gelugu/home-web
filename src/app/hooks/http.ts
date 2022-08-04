@@ -1,5 +1,5 @@
 import axios, { AxiosResponse } from "axios";
-import { apiRoutes, routes } from "../config";
+import { apiRoutes } from "../config";
 
 import { Task } from "../interfaces";
 import {
@@ -8,7 +8,7 @@ import {
   CreateTaskDto,
   UpdateTaskDto,
   TelegramUserDto,
-} from "../interfaces/dto";
+} from "../interfaces";
 
 export const useHttp = (token?: string) => {
   const apiRoute = process.env.NEXT_PUBLIC_API_HOST;
@@ -34,8 +34,7 @@ export const useHttp = (token?: string) => {
     body: T,
     useAuth = true
   ): Promise<AxiosResponse<T, any>> {
-    if (useAuth)
-      return axios.post<T>(`${apiRoute}${route}`, body, axiosConfig);
+    if (useAuth) return axios.post<T>(`${apiRoute}${route}`, body, axiosConfig);
     else return axios.post<T>(`${apiRoute}${route}`, body);
   };
 
@@ -58,19 +57,18 @@ export const useHttp = (token?: string) => {
    * Registration
    */
   const status = async () => get(apiRoutes.status);
-  const registerBot = async (token: string) => post<TelegramUserDto>(
-    apiRoutes.registerBot, { token }
-  );
-  const registerChat = async (chat: string) => post<TelegramUserDto>(
-    apiRoutes.registerChat, { chat }
-  );
+  const registerBot = async (token: string) =>
+    post<TelegramUserDto>(apiRoutes.registerBot, { token });
+  const registerChat = async (chat: string) =>
+    post<TelegramUserDto>(apiRoutes.registerChat, { chat });
   const getChat = async () => get<TelegramUserDto>(apiRoutes.registerChat);
 
   /**
    * Login
    */
   const sendCode = async () => get(apiRoutes.sendCode);
-  const login = async (loginDto: LoginDto) => post<LoginResponseDto>(apiRoutes.login, loginDto);
+  const login = async (loginDto: LoginDto) =>
+    post<LoginResponseDto>(apiRoutes.login, loginDto);
 
   /**
    * Tasks

@@ -13,9 +13,9 @@ import {
   ButtonGroup,
   Icon,
 } from "@chakra-ui/react";
-import { ArrowDownIcon, CloseIcon, EditIcon } from "../../src/icons";
 
-import { Task } from "../../interfaces";
+import { ArrowDownIcon, CloseIcon, EditIcon } from "../../../ui/icons";
+import { Task } from "../../../app/interfaces";
 import { TaskProps } from "./Task.props";
 
 export function Task({ task: propTask }: TaskProps): JSX.Element {
@@ -31,10 +31,10 @@ export function Task({ task: propTask }: TaskProps): JSX.Element {
       isEditing && (
         <ButtonGroup justifyContent="center" size="sm">
           <Button size="sm" {...getSubmitButtonProps()}>
-            <Icon as={EditIcon}/>
+            <Icon as={EditIcon} />
           </Button>
           <Button size="sm" {...getCancelButtonProps()}>
-            <Icon as={CloseIcon}/>
+            <Icon as={CloseIcon} />
           </Button>
         </ButtonGroup>
       )

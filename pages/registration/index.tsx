@@ -1,7 +1,6 @@
 import { useCallback, useContext, useEffect, useState } from "react";
 import { useRouter } from "next/router";
 
-import { TelegramIcon, ChatIcon } from "../../src/icons";
 import {
   Button,
   InputGroup,
@@ -16,9 +15,10 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { useHttp } from "../../hooks/http";
-import { routes } from "../../config";
-import { AppContext } from "../../context/app";
+import { TelegramIcon, ChatIcon } from "../../src/ui/icons";
+import { useHttp } from "../../src/app/hooks";
+import { routes } from "../../src/app/config";
+import { AppContext } from "../../src/app/context";
 
 export default function Login(): JSX.Element {
   const { push } = useRouter();

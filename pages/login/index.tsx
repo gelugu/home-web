@@ -10,9 +10,9 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { useHttp } from "../../hooks/http";
-import { routes } from "../../config";
-import { AppContext } from "../../context/app";
+import { useHttp } from "../../src/app/hooks";
+import { routes } from "../../src/app/config";
+import { AppContext } from "../../src/app/context";
 
 export default function Login(): JSX.Element {
   const { push } = useRouter();

@@ -6,5 +6,5 @@ export interface CreateTaskDto {
 export interface UpdateTaskDto {
   name?: string;
   description?: string;
-  open?: boolean
+  open?: boolean;
 }
