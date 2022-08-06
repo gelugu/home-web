@@ -1,5 +1,4 @@
-import { useCallback, useContext, useEffect, useState } from "react";
-import { useRouter } from "next/router";
+import { useCallback, useEffect, useState } from "react";
 import {
   Progress,
   Input,
@@ -11,14 +10,12 @@ import {
 
 import { Task as TaskComponent } from "../../components";
 
-import { AppContext } from "../../../app/context";
-import { useHttp } from "../../../app/hooks";
+import { useApi } from "../../../app/hooks";
 import { Task } from "../../../app/interfaces";
 import { NewTask } from "../NewTask/NewTask";
 
 export function Tasks(): JSX.Element {
-  const { token, error } = useContext(AppContext);
-  const { getTasks } = useHttp(token);
+  const { getTasks } = useApi();
 
   const [loading, setLoading] = useState<boolean>(true);
 
@@ -26,18 +23,23 @@ export function Tasks(): JSX.Element {
 
   const [searchQuery, setSearchQuery] = useState<string>("");
 
+  const fetchTasks = useCallback(async () => {
+    const sortByOpen = (a: Task, b: Task) => {
+      if (a.open === false && b.open === true) return 1;
+      if (a.open === true && b.open === false) return -1;
+      return 0;
+    };
+    const sortByDate = (a: Task, b: Task) => {
+      if (a.create_date > b.create_date) return -1;
+      if (a.create_date < b.create_date) return 1;
+      return 0;
+    };
+    setTasks((await getTasks()).sort(sortByOpen).sort(sortByDate));
+  }, []);
+
   useEffect(() => {
-    console.log("effect on tasks");
-    getTasks()
-      .then(({ data }) => {
-        setTasks(data);
-      })
-      .catch(({ message }) => {
-        error("Can't load tasks", message);
-      })
-      .finally(() => {
-        setLoading(false);
-      });
+    setLoading(true);
+    fetchTasks().finally(() => setLoading(false));
   }, []);
 
   const getTasksComponents = useCallback(() => {
@@ -45,27 +47,37 @@ export function Tasks(): JSX.Element {
       .filter((task) =>
         task.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      .map((task) => <TaskComponent task={task} />);
+      .sort((a: Task, b: Task) => 0)
+      .map((task) => (
+        <TaskComponent key={task.id} task={task} updateTaskList={fetchTasks} />
+      ));
   }, [tasks, searchQuery]);
 
-  if (loading) return <Progress />;
-
   return (
-    <Stack>
-      <Collapse in={tasks.length > 5}>
-        <Box>
-          <Input
-            placeholder="Search for tasks"
-            value={searchQuery}
-            onChange={({ target }) => setSearchQuery(target.value)}
-          />
-        </Box>
-      </Collapse>
+    <Box p="1">
+      <Stack>
+        <Collapse in={tasks.length > 5}>
+          <Box>
+            <Input
+              placeholder="Search for tasks"
+              type="search"
+              value={searchQuery}
+              onChange={({ target }) => setSearchQuery(target.value)}
+            />
+          </Box>
+        </Collapse>
 
-      <Box mt="2rem">
-        <Stack divider={<StackDivider />}>{getTasksComponents()}</Stack>
-      </Box>
-      <NewTask />
-    </Stack>
+        {loading ? (
+          <Progress isIndeterminate />
+        ) : (
+          <>
+            <Stack divider={<StackDivider />} overflowY="scroll">
+              {getTasksComponents()}
+            </Stack>
+            <NewTask updateTaskList={fetchTasks} />
+          </>
+        )}
+      </Stack>
+    </Box>
   );
 }

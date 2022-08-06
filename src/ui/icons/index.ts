@@ -4,3 +4,5 @@ export { BsChatRightText as ChatIcon } from "react-icons/bs";
 export { FaSearch as SearchIcon } from "react-icons/fa";
 export { CgClose as CloseIcon } from "react-icons/cg";
 export { MdModeEditOutline as EditIcon } from "react-icons/md";
+export { MdDone as DoneIcon } from "react-icons/md";
+export { MdDelete as DeleteIcon } from "react-icons/md";

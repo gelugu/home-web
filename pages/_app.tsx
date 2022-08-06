@@ -14,7 +14,6 @@ function MyApp({
   const [token, setToken] = useState("");
 
   useEffect(() => {
-    console.log("Window updated");
     if (window.localStorage) setToken(localStorage.getItem("token") || "");
     setLoading(false);
   }, []);

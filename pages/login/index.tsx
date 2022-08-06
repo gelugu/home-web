@@ -10,14 +10,14 @@ import {
   Tooltip,
 } from "@chakra-ui/react";
 
-import { useHttp } from "../../src/app/hooks";
+import { useApi } from "../../src/app/hooks";
 import { routes } from "../../src/app/config";
 import { AppContext } from "../../src/app/context";
 
 export default function Login(): JSX.Element {
   const { push } = useRouter();
   const { setToken, error } = useContext(AppContext);
-  const { status, sendCode, login } = useHttp();
+  const { status, sendCode, login } = useApi();
 
   const [code, setCode] = useState<string>("");
 

@@ -1,4 +1,3 @@
-import axios, { AxiosResponse } from "axios";
 import { apiRoutes } from "../config";
 
 import { Task } from "../interfaces";
@@ -9,49 +8,13 @@ import {
   UpdateTaskDto,
   TelegramUserDto,
 } from "../interfaces";
+import { useRequest } from ".";
+import { AppContext } from "../context";
+import { useContext } from "react";
 
-export const useHttp = (token?: string) => {
-  const apiRoute = process.env.NEXT_PUBLIC_API_HOST;
-
-  const headers = { Authorization: `Bearer ${token}` };
-  const axiosConfig = { headers };
-
-  const get = function <T>(
-    route: string,
-    ...querys: string[]
-  ): Promise<AxiosResponse<T, any>> {
-    let url = `${apiRoute}${route}`;
-
-    if (querys.length) {
-      url += `?${querys.join("&")}`;
-    }
-
-    return axios.get<T>(url, axiosConfig);
-  };
-
-  const post = function <T>(
-    route: string,
-    body: T,
-    useAuth = true
-  ): Promise<AxiosResponse<T, any>> {
-    if (useAuth) return axios.post<T>(`${apiRoute}${route}`, body, axiosConfig);
-    else return axios.post<T>(`${apiRoute}${route}`, body);
-  };
-
-  const put = function <T>(
-    route: string,
-    id: string,
-    body: T
-  ): Promise<AxiosResponse<T, any>> {
-    return axios.put<T>(`${apiRoute}${route}/${id}`, body, axiosConfig);
-  };
-
-  const remove = function <T>(
-    route: string,
-    id: string
-  ): Promise<AxiosResponse<T, any>> {
-    return axios.delete<T>(`${apiRoute}${route}/${id}`, axiosConfig);
-  };
+export const useApi = () => {
+  const { token, error } = useContext(AppContext);
+  const { get, post, put, remove } = useRequest({ token });
 
   /**
    * Registration
@@ -73,12 +36,51 @@ export const useHttp = (token?: string) => {
   /**
    * Tasks
    */
-  const getTasks = () => get<Task[]>(apiRoutes.tasks);
-  const getTask = (id: string) => get<Task>(`${apiRoutes.tasks}/${id}`);
-  const createTask = (body: CreateTaskDto) => post<Task>(apiRoutes.tasks, body);
-  const updateTask = (id: string, body: UpdateTaskDto) =>
-    put<Task>(apiRoutes.tasks, id, body);
-  const deleteTask = (id: string) => remove<Task>(apiRoutes.tasks, id);
+  const getTasks = async (): Promise<Task[]> => {
+    try {
+      const tasks = await get<Task[]>(apiRoutes.tasks);
+      return tasks.data;
+    } catch ({ message }) {
+      error("Can't load tasks", message);
+      return [];
+    }
+  };
+  const getTask = async (id: string): Promise<Task> => {
+    try {
+      const task = await get<Task>(`${apiRoutes.tasks}/${id}`);
+      return task.data;
+    } catch ({ message }) {
+      error("Can't load tasks", message);
+    }
+  };
+  const createTask = async (body: CreateTaskDto): Promise<Task> => {
+    try {
+      const task = await post<CreateTaskDto>(apiRoutes.tasksCreate, body);
+      return task.data as Task;
+    } catch ({ message }) {
+      error("Can't create tasks", message);
+    }
+  };
+  const updateTask = async (id: string, body: UpdateTaskDto) => {
+    try {
+      // ToDo: delete unupdated props
+      delete body["id"] 
+      delete body["create_date"]
+
+      const task = await put<UpdateTaskDto>(`${apiRoutes.tasks}/${id}`, body);
+      return task.data as Task;
+    } catch ({ message }) {
+      error("Can't update tasks", message);
+    }
+  }
+  const deleteTask = async (id: string): Promise<Task> => {
+    try {
+      const task = await remove<Task>(`${apiRoutes.tasks}/${id}`);
+      return task.data as Task;
+    } catch ({ message }) {
+      error("Can't update tasks", message);
+    }
+  }
 
   return {
     status,

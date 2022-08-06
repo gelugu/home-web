@@ -16,14 +16,14 @@ import {
 } from "@chakra-ui/react";
 
 import { TelegramIcon, ChatIcon } from "../../src/ui/icons";
-import { useHttp } from "../../src/app/hooks";
+import { useApi } from "../../src/app/hooks";
 import { routes } from "../../src/app/config";
 import { AppContext } from "../../src/app/context";
 
 export default function Login(): JSX.Element {
   const { push } = useRouter();
   const { error } = useContext(AppContext);
-  const { status, registerBot, registerChat, getChat } = useHttp();
+  const { status, registerBot, registerChat, getChat } = useApi();
 
   const [token, setToken] = useState<string>("");
   const [tokenConfirmed, setTokenConfirmed] = useState<boolean>(false);

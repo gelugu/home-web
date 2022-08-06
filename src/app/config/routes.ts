@@ -21,4 +21,5 @@ export const apiRoutes = {
   login: "/login",
 
   tasks: "/tasks",
+  tasksCreate: "/tasks/create",
 };
