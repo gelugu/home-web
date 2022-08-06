@@ -47,7 +47,6 @@ export function Tasks(): JSX.Element {
       .filter((task) =>
         task.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
-      .sort((a: Task, b: Task) => 0)
       .map((task) => (
         <TaskComponent key={task.id} task={task} updateTaskList={fetchTasks} />
       ));

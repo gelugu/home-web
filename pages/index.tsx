@@ -1,4 +1,4 @@
-import { Divider, Grid, GridItem } from "@chakra-ui/react";
+import { Grid, GridItem } from "@chakra-ui/react";
 import { Tasks } from "../src/ui/components";
 
 function Home(): JSX.Element {

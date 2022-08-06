@@ -37,7 +37,7 @@ export default function Login(): JSX.Element {
   useEffect(() => {
     if (code.length === 4)
       login({ code })
-        .then(({ data }) => {
+        .then((data) => {
           setToken(data.token);
           localStorage.setItem("token", data.token);
           push(routes.root);

@@ -52,7 +52,7 @@ export default function Login(): JSX.Element {
     setLoading(true);
 
     registerBot(token)
-      .then(({ data }) => {
+      .then((data) => {
         setUsername(`${data.username}`);
         setChat(data.id.toString());
         setTokenConfirmed(true);

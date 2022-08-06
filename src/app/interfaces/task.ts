@@ -18,4 +18,4 @@ export const emptyTask: Task = {
   parent_id: "",
   due_date: null,
   schedule_date: null,
-}
+};

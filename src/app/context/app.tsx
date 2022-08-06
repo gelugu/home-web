@@ -10,7 +10,7 @@ export interface IAppContext {
 
 export const AppContext = createContext<IAppContext>({
   token: "",
-  setToken: () => {},
+  setToken: () => ({}),
   error: () => "",
   success: () => "",
 });
@@ -25,7 +25,7 @@ export const AppContextProvider = ({
   const defaultToastTime = 5000;
 
   const error = useCallback(
-    (title: string, description: string = "") =>
+    (title: string, description = "") =>
       toast({
         title,
         description,
@@ -37,7 +37,7 @@ export const AppContextProvider = ({
   );
 
   const success = useCallback(
-    (title: string, description: string = "") =>
+    (title: string, description = "") =>
       toast({
         title,
         description,

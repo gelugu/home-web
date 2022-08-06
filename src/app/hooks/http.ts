@@ -20,18 +20,24 @@ export const useApi = () => {
    * Registration
    */
   const status = async () => get(apiRoutes.status);
-  const registerBot = async (token: string) =>
-    post<TelegramUserDto>(apiRoutes.registerBot, { token });
-  const registerChat = async (chat: string) =>
-    post<TelegramUserDto>(apiRoutes.registerChat, { chat });
+  const registerBot = async (token: string): Promise<TelegramUserDto> => {
+    return (await post(apiRoutes.registerBot, { token }))
+      .data as unknown as TelegramUserDto;
+  };
+  const registerChat = async (chat: string): Promise<TelegramUserDto> => {
+    return (await post(apiRoutes.registerChat, { chat }))
+      .data as unknown as TelegramUserDto;
+  };
   const getChat = async () => get<TelegramUserDto>(apiRoutes.registerChat);
 
   /**
    * Login
    */
   const sendCode = async () => get(apiRoutes.sendCode);
-  const login = async (loginDto: LoginDto) =>
-    post<LoginResponseDto>(apiRoutes.login, loginDto);
+  const login = async (loginDto: LoginDto): Promise<LoginResponseDto> => {
+    return (await post(apiRoutes.login, loginDto))
+      .data as unknown as LoginResponseDto;
+  };
 
   /**
    * Tasks
@@ -64,15 +70,15 @@ export const useApi = () => {
   const updateTask = async (id: string, body: UpdateTaskDto) => {
     try {
       // ToDo: delete unupdated props
-      delete body["id"] 
-      delete body["create_date"]
+      delete body["id"];
+      delete body["create_date"];
 
       const task = await put<UpdateTaskDto>(`${apiRoutes.tasks}/${id}`, body);
       return task.data as Task;
     } catch ({ message }) {
       error("Can't update tasks", message);
     }
-  }
+  };
   const deleteTask = async (id: string): Promise<Task> => {
     try {
       const task = await remove<Task>(`${apiRoutes.tasks}/${id}`);
@@ -80,7 +86,7 @@ export const useApi = () => {
     } catch ({ message }) {
       error("Can't update tasks", message);
     }
-  }
+  };
 
   return {
     status,
