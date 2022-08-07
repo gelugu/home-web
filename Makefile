@@ -21,11 +21,11 @@ lint:
 	npm run lint && npm run stylelint
 
 docker-build:
-	docker build -t ${dockerRegistry}/${imageName}:${version} -f cicd/Dockerfile .
+	docker build -t ${imageName}:${version} -f cicd/Dockerfile .
 docker-push:
-	docker push ${dockerRegistry}/${imageName}:${version}
+	docker push ${imageName}:${version}
 docker-run:
-	docker run -p 80:3000 ${dockerRegistry}/${imageName}:${version}
+	docker run -p 3000:3000 -e "NEXT_PUBLIC_API_HOST=http://localhost:8080" ${imageName}:${version}
 docker-test: docker-build docker-run
 
 docker-deploy: docker-build docker-push
