@@ -1,4 +1,5 @@
-import { apiRoutes } from "../config";
+import { useRouter } from "next/router";
+import { routes, apiRoutes } from "../config";
 
 import { Task } from "../interfaces";
 import {
@@ -13,6 +14,8 @@ import { AppContext } from "../context";
 import { useContext } from "react";
 
 export const useApi = () => {
+  const { push } = useRouter();
+
   const { token, error } = useContext(AppContext);
   const { get, post, put, remove } = useRequest({ token });
 
@@ -47,6 +50,7 @@ export const useApi = () => {
       const tasks = await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`);
       return tasks.data;
     } catch ({ message }) {
+      if (message.includes("401")) push(routes.login);
       error("Can't load tasks", message);
       return [];
     }
