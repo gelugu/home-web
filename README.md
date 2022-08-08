@@ -2,6 +2,8 @@
   _home
 </p>
 
+[![Known Vulnerabilities](https://snyk.io/test/github/gelugu/home-web/badge.svg)](https://snyk.io/test/github/gelugu/home-web)
+
 # Home service (front)
 
 ## Commands
