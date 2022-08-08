@@ -13,4 +13,5 @@ export interface UpdateTaskDto {
   parent_id?: string;
   due_date?: number;
   schedule_date?: number;
+  hidden?: boolean;
 }

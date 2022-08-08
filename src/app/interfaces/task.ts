@@ -7,6 +7,7 @@ export interface Task {
   parent_id?: string;
   due_date?: number;
   schedule_date?: number;
+  hidden?: boolean;
 }
 
 export const emptyTask: Task = {
@@ -18,4 +19,5 @@ export const emptyTask: Task = {
   parent_id: "",
   due_date: null,
   schedule_date: null,
+  hidden: false,
 };

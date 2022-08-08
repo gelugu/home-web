@@ -6,6 +6,8 @@ import {
   Stack,
   Collapse,
   StackDivider,
+  HStack,
+  Button,
 } from "@chakra-ui/react";
 
 import { Task as TaskComponent } from "../../components";
@@ -17,11 +19,12 @@ import { NewTask } from "../NewTask/NewTask";
 export function Tasks(): JSX.Element {
   const { getTasks } = useApi();
 
-  const [loading, setLoading] = useState<boolean>(true);
+  const [loading, setLoading] = useState(true);
 
   const [tasks, setTasks] = useState<Task[]>([]);
+  const [showHidden, setShowHidden] = useState(false);
 
-  const [searchQuery, setSearchQuery] = useState<string>("");
+  const [searchQuery, setSearchQuery] = useState("");
 
   const fetchTasks = useCallback(async () => {
     const sortByOpen = (a: Task, b: Task) => {
@@ -34,13 +37,13 @@ export function Tasks(): JSX.Element {
       if (a.create_date < b.create_date) return 1;
       return 0;
     };
-    setTasks((await getTasks()).sort(sortByOpen).sort(sortByDate));
-  }, []);
+    setTasks((await getTasks(showHidden)).sort(sortByOpen).sort(sortByDate));
+  }, [showHidden]);
 
   useEffect(() => {
     setLoading(true);
     fetchTasks().finally(() => setLoading(false));
-  }, []);
+  }, [showHidden]);
 
   const getTasksComponents = useCallback(() => {
     return tasks
@@ -73,7 +76,12 @@ export function Tasks(): JSX.Element {
             <Stack divider={<StackDivider />} overflowY="scroll">
               {getTasksComponents()}
             </Stack>
-            <NewTask updateTaskList={fetchTasks} />
+            <HStack justifyContent="space-between">
+              <Button onClick={() => setShowHidden(!showHidden)}>
+                {showHidden ? "Hide completed" : "Show completed"}
+              </Button>
+              <NewTask updateTaskList={fetchTasks} />
+            </HStack>
           </>
         )}
       </Stack>
