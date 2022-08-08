@@ -2,6 +2,7 @@
   _home
 </p>
 
+[![Build and push docker image](https://github.com/gelugu/home-web/actions/workflows/docker-image.yml/badge.svg)](https://github.com/gelugu/home-web/actions/workflows/docker-image.yml)
 [![Known Vulnerabilities](https://snyk.io/test/github/gelugu/home-web/badge.svg)](https://snyk.io/test/github/gelugu/home-web)
 
 # Home service (front)
