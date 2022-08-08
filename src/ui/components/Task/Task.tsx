@@ -224,14 +224,14 @@ export function Task({
               </HStack>
             </Collapse>
             <ButtonGroup justifyContent="space-between">
-              <Collapse in={!Boolean(task.schedule_date)}>
+              <Collapse in={!task.schedule_date}>
                 <Button
                   onClick={() => handleUpdate("schedule_date", Date.now())}
                 >
                   Schedule
                 </Button>
               </Collapse>
-              <Collapse in={!Boolean(task.due_date)}>
+              <Collapse in={!task.due_date}>
                 <Button onClick={() => handleUpdate("due_date", Date.now())}>
                   Due date
                 </Button>
