@@ -1,59 +1,51 @@
 import { useRouter } from "next/router";
-import { routes, apiRoutes } from "../config";
+import { apiRoutes } from "../config";
 
-import { Task } from "../interfaces";
+import { SignUpDto, Task, User } from "../interfaces";
 import {
-  LoginDto,
+  LoginCodeDto,
   LoginResponseDto,
   CreateTaskDto,
   UpdateTaskDto,
-  TelegramUserDto,
+  LoginPasswordDto,
 } from "../interfaces";
 import { useRequest } from ".";
 import { AppContext } from "../context";
 import { useContext } from "react";
 
 export const useApi = () => {
-  const { push } = useRouter();
-
   const { token, error } = useContext(AppContext);
   const { get, post, put, remove } = useRequest({ token });
 
   /**
-   * Registration
+   * Sign Up
    */
-  const status = async () => get(apiRoutes.status);
-  const registerBot = async (token: string): Promise<TelegramUserDto> => {
-    return (await post(apiRoutes.registerBot, { token }))
-      .data as unknown as TelegramUserDto;
-  };
-  const registerChat = async (chat: string): Promise<TelegramUserDto> => {
-    return (await post(apiRoutes.registerChat, { chat }))
-      .data as unknown as TelegramUserDto;
-  };
-  const getChat = async () => get<TelegramUserDto>(apiRoutes.registerChat);
+  const signUp = async (user: SignUpDto): Promise<User> =>
+    (await post(apiRoutes.signup, user)).data as User;
 
   /**
    * Login
    */
   const sendCode = async () => get(apiRoutes.sendCode);
-  const login = async (loginDto: LoginDto): Promise<LoginResponseDto> => {
-    return (await post(apiRoutes.login, loginDto))
+  const loginWithCode = async (
+    loginDto: LoginCodeDto
+  ): Promise<LoginResponseDto> =>
+    (await post(apiRoutes.loginWithCode, loginDto))
       .data as unknown as LoginResponseDto;
-  };
+  const loginWithPassword = async (
+    loginDto: LoginPasswordDto
+  ): Promise<LoginResponseDto> =>
+    (await post(apiRoutes.loginWithPassword, loginDto))
+      .data as unknown as LoginResponseDto;
+  const status = async (): Promise<string> =>
+    (await get<string>(apiRoutes.status)).data;
 
   /**
    * Tasks
    */
   const getTasks = async (showHidden = false): Promise<Task[]> => {
-    try {
-      const tasks = await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`);
-      return tasks.data;
-    } catch ({ message }) {
-      if (message.includes("401")) push(routes.login);
-      error("Can't load tasks", message);
-      return [];
-    }
+    const tasks = await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`);
+    return tasks.data;
   };
   const getTask = async (id: string): Promise<Task> => {
     try {
@@ -93,12 +85,11 @@ export const useApi = () => {
   };
 
   return {
+    signUp,
     status,
-    registerBot,
-    registerChat,
-    getChat,
     sendCode,
-    login,
+    loginWithCode,
+    loginWithPassword,
     createTask,
     updateTask,
     deleteTask,

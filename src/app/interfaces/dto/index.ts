@@ -1,3 +1,3 @@
-export * from "./register";
-export * from "./login";
+export * from "./auth";
 export * from "./tasks";
+export * from "./user";

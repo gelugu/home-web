@@ -7,3 +7,4 @@ export { MdModeEditOutline as EditIcon } from "react-icons/md";
 export { MdDone as DoneIcon } from "react-icons/md";
 export { MdDelete as DeleteIcon } from "react-icons/md";
 export { BiTask as TaskIcon } from "react-icons/bi";
+export { GrUpdate as UpdateIcon } from "react-icons/gr";
