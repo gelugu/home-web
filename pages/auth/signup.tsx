@@ -36,7 +36,7 @@ export default function SignUp(): JSX.Element {
         let userName = user.name;
         if (userName == "") userName = user.login;
         success(`Welcome, ${userName}`, "Now you can login");
-        push(routes.login);
+        push(routes.signin);
       })
       .catch(({ response }) => {
         error("Sign Up failed", response.data);
@@ -86,7 +86,7 @@ export default function SignUp(): JSX.Element {
           />
         </InputGroup>
         <ButtonGroup justifyContent="space-between">
-          <Button onClick={() => push(routes.login)}>Sign In</Button>
+          <Button onClick={() => push(routes.signin)}>Sign In</Button>
           <Button
             onClick={() => {
               handleSignUp();

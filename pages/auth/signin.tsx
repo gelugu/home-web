@@ -24,7 +24,6 @@ import {
   TabPanel,
   TabPanels,
   Tabs,
-  Tooltip,
   useMediaQuery,
 } from "@chakra-ui/react";
 
@@ -32,7 +31,7 @@ import { useApi } from "../../src/app/hooks";
 import { mobileScreen, routes } from "../../src/app/config";
 import { AppContext } from "../../src/app/context";
 
-export default function SignUp(): JSX.Element {
+export default function SignIn(): JSX.Element {
   const [isMobile] = useMediaQuery(mobileScreen);
   const { push } = useRouter();
   const { setToken, error } = useContext(AppContext);
@@ -128,6 +127,7 @@ export default function SignUp(): JSX.Element {
                     onChange={({ target }) => {
                       setLogin(target.value);
                     }}
+                    autoFocus={login === ""}
                   />
                 </InputGroup>
                 <InputGroup>
@@ -138,11 +138,12 @@ export default function SignUp(): JSX.Element {
                     onChange={({ target }) => {
                       setPassword(target.value);
                     }}
+                    autoFocus={login !== ""}
                     isDisabled={loading}
                   />
                 </InputGroup>
                 <ButtonGroup justifyContent="space-between">
-                  <Button onClick={() => push(routes.registration)}>
+                  <Button onClick={() => push(routes.signup)}>
                     Sign Up
                   </Button>
                   <Button
@@ -171,23 +172,20 @@ export default function SignUp(): JSX.Element {
                     />
                   </InputGroup>
                   <HStack>
-                    <Tooltip label="Invitation code, check telegram bot">
-                      <PinInput
-                        value={code}
-                        onChange={(e) => setCode(e)}
-                        autoFocus
-                        isDisabled={loading}
-                      >
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                        <PinInputField />
-                      </PinInput>
-                    </Tooltip>
+                    <PinInput
+                      value={code}
+                      onChange={(e) => setCode(e)}
+                      isDisabled={loading}
+                    >
+                      <PinInputField />
+                      <PinInputField />
+                      <PinInputField />
+                      <PinInputField />
+                    </PinInput>
                     <Button onClick={sendCodeHandler}>Send code</Button>
                   </HStack>
                   <ButtonGroup justifyContent="flex-start">
-                    <Button onClick={() => push(routes.registration)}>
+                    <Button onClick={() => push(routes.signup)}>
                       Sign Up
                     </Button>
                   </ButtonGroup>

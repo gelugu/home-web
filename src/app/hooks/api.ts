@@ -1,4 +1,3 @@
-import { useRouter } from "next/router";
 import { apiRoutes } from "../config";
 
 import { SignUpDto, Task, User } from "../interfaces";
@@ -14,8 +13,16 @@ import { AppContext } from "../context";
 import { useContext } from "react";
 
 export const useApi = () => {
-  const { token, error } = useContext(AppContext);
-  const { get, post, put, remove } = useRequest({ token });
+  const { error } = useContext(AppContext);
+  const { get, post, put, remove } = useRequest();
+
+  /**
+   * Root
+   */
+  const getLoginPattern = async (): Promise<string> =>
+    (await get<string>(apiRoutes.loginPattern)).data;
+  const getPasswordPattern = async (): Promise<string> =>
+    (await get<string>(apiRoutes.passwordPattern)).data;
 
   /**
    * Sign Up
@@ -30,22 +37,26 @@ export const useApi = () => {
   const loginWithCode = async (
     loginDto: LoginCodeDto
   ): Promise<LoginResponseDto> =>
-    (await post(apiRoutes.loginWithCode, loginDto))
+    (await post(apiRoutes.signinTelegram, loginDto))
       .data as unknown as LoginResponseDto;
   const loginWithPassword = async (
     loginDto: LoginPasswordDto
   ): Promise<LoginResponseDto> =>
-    (await post(apiRoutes.loginWithPassword, loginDto))
+    (await post(apiRoutes.signinPassword, loginDto))
       .data as unknown as LoginResponseDto;
-  const status = async (): Promise<string> =>
-    (await get<string>(apiRoutes.status)).data;
+  const status = async (customToken?: string): Promise<string> =>
+    (await get<string>(apiRoutes.authStatus)).data;
 
   /**
    * Tasks
    */
   const getTasks = async (showHidden = false): Promise<Task[]> => {
-    const tasks = await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`);
-    return tasks.data;
+    try {
+      return (await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`)).data;
+    } catch ({ response }) {
+      error("Can't load tasks", response.data);
+      return []
+    }
   };
   const getTask = async (id: string): Promise<Task> => {
     try {
@@ -57,7 +68,7 @@ export const useApi = () => {
   };
   const createTask = async (body: CreateTaskDto): Promise<Task> => {
     try {
-      const task = await post<CreateTaskDto>(apiRoutes.tasksCreate, body);
+      const task = await post<CreateTaskDto>(apiRoutes.tasks, body);
       return task.data as Task;
     } catch ({ message }) {
       error("Can't create tasks", message);
@@ -85,6 +96,8 @@ export const useApi = () => {
   };
 
   return {
+    getLoginPattern,
+    getPasswordPattern,
     signUp,
     status,
     sendCode,

@@ -1,6 +1,7 @@
 export interface Task {
   id: string;
   name: string;
+  user_id: string;
   create_date: number;
   description: string;
   open: boolean;
@@ -13,6 +14,7 @@ export interface Task {
 export const emptyTask: Task = {
   id: "",
   name: "",
+  user_id: "",
   create_date: Date.now(),
   description: "",
   open: true,

@@ -8,7 +8,7 @@ export const Menu = () => {
 
   const logout = useCallback(() => {
     localStorage.removeItem("token");
-    push(routes.login);
+    push(routes.signin);
   }, []);
   return (
     <Stack h="100%" flexDirection="row">

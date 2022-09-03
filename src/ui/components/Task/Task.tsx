@@ -13,7 +13,6 @@ import {
   InputGroup,
   InputLeftAddon,
   Text,
-  Tooltip,
   Progress,
 } from "@chakra-ui/react";
 
@@ -117,7 +116,6 @@ export function Task({
 
     updateTask(task.id, { ...task, hidden: true });
     updateTaskList();
-    console.log(task.name, "hide task");
   }, [task]);
   const cancelHide = useCallback(() => {
     if (hideTimeoutId !== null) clearTimeout(hideTimeoutId);

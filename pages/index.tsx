@@ -1,7 +1,7 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import { mobileScreen } from "../src/app/config";
 import { Tasks } from "../src/ui/components";
-import { DesktopLayout, MobileLayout } from "../src/ui/layouts";
+import { DesktopLayout, MobileLayout, withAuth } from "../src/ui/layouts";
 
 function Home(): JSX.Element {
   const [isMobile] = useMediaQuery(mobileScreen);
@@ -17,4 +17,4 @@ function Home(): JSX.Element {
   );
 }
 
-export default Home;
+export default withAuth(Home);
