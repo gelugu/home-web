@@ -62,16 +62,16 @@ export const useApi = () => {
     try {
       const task = await get<Task>(`${apiRoutes.tasks}/${id}`);
       return task.data;
-    } catch ({ message }) {
-      error("Can't load tasks", message);
+    } catch ({ response }) {
+      error("Can't load tasks", response.data);
     }
   };
   const createTask = async (body: CreateTaskDto): Promise<Task> => {
     try {
       const task = await post<CreateTaskDto>(apiRoutes.tasks, body);
       return task.data as Task;
-    } catch ({ message }) {
-      error("Can't create tasks", message);
+    } catch ({ response }) {
+      error("Can't create tasks", response.data);
     }
   };
   const updateTask = async (id: string, body: UpdateTaskDto) => {
@@ -82,16 +82,16 @@ export const useApi = () => {
 
       const task = await put<UpdateTaskDto>(`${apiRoutes.tasks}/${id}`, body);
       return task.data as Task;
-    } catch ({ message }) {
-      error("Can't update tasks", message);
+    } catch ({ response }) {
+      error("Can't update tasks", response.data);
     }
   };
   const deleteTask = async (id: string): Promise<Task> => {
     try {
       const task = await remove<Task>(`${apiRoutes.tasks}/${id}`);
       return task.data as Task;
-    } catch ({ message }) {
-      error("Can't update tasks", message);
+    } catch ({ response }) {
+      error("Can't update tasks", response.data);
     }
   };
 

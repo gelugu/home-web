@@ -69,7 +69,7 @@ export function Task({
         setTask(updatedTask);
         handleHide();
       })
-      .catch((e) => error("Can't close task", JSON.stringify(e)))
+      .catch(({ response }) => error("Can't close task", response.data))
       .finally(() => setTaskStatusLoading(false));
   }, [task]);
   const handleCancelClose = useCallback(() => {
@@ -82,7 +82,7 @@ export function Task({
 
     updateTask(task.id, { ...task, open: true, hidden: false })
       .then((updatedTask) => setTask(updatedTask))
-      .catch((e) => error("Can't open task", JSON.stringify(e)))
+      .catch(({ response }) => error("Can't open task", response.data))
       .finally(() => setTaskStatusLoading(false));
   }, [task]);
 
