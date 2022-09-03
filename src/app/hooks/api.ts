@@ -44,7 +44,7 @@ export const useApi = () => {
   ): Promise<LoginResponseDto> =>
     (await post(apiRoutes.signinPassword, loginDto))
       .data as unknown as LoginResponseDto;
-  const status = async (customToken?: string): Promise<string> =>
+  const status = async (): Promise<string> =>
     (await get<string>(apiRoutes.authStatus)).data;
 
   /**
@@ -55,7 +55,7 @@ export const useApi = () => {
       return (await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`)).data;
     } catch ({ response }) {
       error("Can't load tasks", response.data);
-      return []
+      return [];
     }
   };
   const getTask = async (id: string): Promise<Task> => {
