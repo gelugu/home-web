@@ -10,3 +10,5 @@ export { BiTask as TaskIcon } from "react-icons/bi";
 export { GrUpdate as UpdateIcon } from "react-icons/gr";
 export { MdLogout as LogoutIcon } from "react-icons/md";
 export { CgProfile as ProfileIcon } from "react-icons/cg";
+export { BiBell as AlarmIcon } from "react-icons/bi";
+export { FaFlagCheckered as FinishIcon } from "react-icons/fa";

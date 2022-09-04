@@ -14,7 +14,7 @@ import {
   Text,
 } from "@chakra-ui/react";
 
-import { ArrowDownIcon, CloseIcon, DoneIcon } from "../../../ui/icons";
+import { AlarmIcon, ArrowDownIcon, CloseIcon, DoneIcon, FinishIcon } from "../../../ui/icons";
 import { Task } from "../../../app/interfaces";
 import { TaskProps } from "./Task.props";
 import { useApi } from "../../../app/hooks";
@@ -129,7 +129,7 @@ export function Task({
             <Collapse in={Boolean(task.due_date)}>
               <HStack>
                 <InputGroup>
-                  <InputLeftAddon>Due</InputLeftAddon>
+                  <InputLeftAddon><Icon as={FinishIcon} /></InputLeftAddon>
                   <Input
                     type="datetime-local"
                     value={dateToJsFormat(task.due_date)}
@@ -152,7 +152,7 @@ export function Task({
             <Collapse in={Boolean(task.schedule_date)}>
               <HStack>
                 <InputGroup>
-                  <InputLeftAddon>Scheduled at</InputLeftAddon>
+                  <InputLeftAddon><Icon as={AlarmIcon} /></InputLeftAddon>
                   <Input
                     type="datetime-local"
                     value={dateToJsFormat(task.schedule_date)}
