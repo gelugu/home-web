@@ -50,9 +50,9 @@ export const useApi = () => {
   /**
    * Tasks
    */
-  const getTasks = async (showHidden = false): Promise<Task[]> => {
+  const getTasks = async (): Promise<Task[]> => {
     try {
-      return (await get<Task[]>(apiRoutes.tasks, `hidden=${showHidden}`)).data;
+      return (await get<Task[]>(apiRoutes.tasks)).data;
     } catch ({ response }) {
       error("Can't load tasks", response.data);
       return [];

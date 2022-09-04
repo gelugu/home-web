@@ -8,6 +8,9 @@ import {
   StackDivider,
   HStack,
   Button,
+  InputGroup,
+  InputLeftAddon,
+  Icon,
 } from "@chakra-ui/react";
 
 import { Task as TaskComponent } from "../../components";
@@ -15,6 +18,7 @@ import { Task as TaskComponent } from "../../components";
 import { useApi } from "../../../app/hooks";
 import { Task } from "../../../app/interfaces";
 import { NewTask } from "../NewTask/NewTask";
+import { SearchIcon } from "../../icons";
 
 export function Tasks(): JSX.Element {
   const { getTasks } = useApi();
@@ -22,69 +26,63 @@ export function Tasks(): JSX.Element {
   const [loading, setLoading] = useState(true);
 
   const [tasks, setTasks] = useState<Task[]>([]);
-  const [showHidden, setShowHidden] = useState(false);
+  const [showCompleted, setShowCompleted] = useState(false);
 
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchTasks = useCallback(async () => {
-    const sortByOpen = (a: Task, b: Task) => {
-      if (a.open === false && b.open === true) return 1;
-      if (a.open === true && b.open === false) return -1;
-      return 0;
-    };
-    const sortByDate = (a: Task, b: Task) => {
-      if (a.create_date > b.create_date) return -1;
-      if (a.create_date < b.create_date) return 1;
-      return 0;
-    };
-    setTasks((await getTasks(showHidden)).sort(sortByOpen).sort(sortByDate));
-  }, [showHidden]);
+    setTasks(await getTasks());
+  }, []);
 
   useEffect(() => {
     setLoading(true);
     fetchTasks().finally(() => setLoading(false));
-  }, [showHidden]);
+  }, []);
 
   const getTasksComponents = useCallback(() => {
     return tasks
       .filter((task) =>
         task.name.toLowerCase().includes(searchQuery.toLowerCase())
       )
+      .filter((task) => task.open === !showCompleted)
       .map((task) => (
         <TaskComponent key={task.id} task={task} updateTaskList={fetchTasks} />
       ));
-  }, [tasks, searchQuery]);
+  }, [tasks, searchQuery, showCompleted]);
 
   return (
-    <Box p="1">
-      <Stack>
-        <Collapse in={tasks.length > 5}>
-          <Box>
+    <Stack p="1">
+      <Collapse in={tasks.filter((t) => t.open === !showCompleted).length > 5}>
+        <Box>
+          <InputGroup>
+            <InputLeftAddon>
+              <Icon as={SearchIcon} />
+            </InputLeftAddon>
             <Input
               placeholder="Search for tasks"
               type="search"
               value={searchQuery}
               onChange={({ target }) => setSearchQuery(target.value)}
             />
-          </Box>
-        </Collapse>
+          </InputGroup>
+        </Box>
+      </Collapse>
 
-        {loading ? (
-          <Progress isIndeterminate />
-        ) : (
-          <>
-            <Stack divider={<StackDivider />} overflowY="scroll">
-              {getTasksComponents()}
-            </Stack>
-            <HStack justifyContent="space-between">
-              <Button onClick={() => setShowHidden(!showHidden)}>
-                {showHidden ? "Hide completed" : "Show completed"}
-              </Button>
-              <NewTask updateTaskList={fetchTasks} />
-            </HStack>
-          </>
-        )}
-      </Stack>
-    </Box>
+      {loading ? (
+        <Progress isIndeterminate />
+      ) : (
+        <>
+          <Stack divider={<StackDivider />} overflowY="scroll">
+            {getTasksComponents()}
+          </Stack>
+          <HStack justifyContent="space-between">
+            <Button onClick={() => setShowCompleted(!showCompleted)}>
+              {showCompleted ? "Hide completed" : "Show completed"}
+            </Button>
+            <NewTask updateTaskList={fetchTasks} />
+          </HStack>
+        </>
+      )}
+    </Stack>
   );
 }

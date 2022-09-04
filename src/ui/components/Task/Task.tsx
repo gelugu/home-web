@@ -1,7 +1,6 @@
 import { useState, useCallback, useContext } from "react";
 import moment from "moment";
 import {
-  Button,
   Box,
   Collapse,
   HStack,
@@ -13,7 +12,6 @@ import {
   InputGroup,
   InputLeftAddon,
   Text,
-  Progress,
 } from "@chakra-ui/react";
 
 import { ArrowDownIcon, CloseIcon, DoneIcon } from "../../../ui/icons";
@@ -21,6 +19,7 @@ import { Task } from "../../../app/interfaces";
 import { TaskProps } from "./Task.props";
 import { useApi } from "../../../app/hooks";
 import { AppContext } from "../../../app/context";
+import { Button } from "../common/Button";
 
 export function Task({
   task: propTask,
@@ -36,8 +35,6 @@ export function Task({
   const [open, setOpen] = useState(false);
 
   const [updateTimeoutId, setUpdateTimeoutId] = useState(null);
-  const [hideTimeoutId, setHideTimeoutId] = useState(null);
-  const [hideTimeout, setHideTimeout] = useState(0);
 
   const handleUpdate = useCallback(
     (key: string, value: any) => {
@@ -61,68 +58,25 @@ export function Task({
   );
 
   const handleClose = useCallback(() => {
-    cancelHide();
-    setTaskStatusLoading(true);
-
     updateTask(task.id, { ...task, open: false })
       .then((updatedTask) => {
         setTask(updatedTask);
-        handleHide();
+        updateTaskList();
       })
-      .catch(({ response }) => error("Can't close task", response.data))
-      .finally(() => setTaskStatusLoading(false));
-  }, [task]);
-  const handleCancelClose = useCallback(() => {
-    cancelHide();
-    handleOpen();
+      .catch(({ response }) => error("Can't close task", response.data));
   }, [task]);
 
   const handleOpen = useCallback(() => {
     setTaskStatusLoading(true);
 
-    updateTask(task.id, { ...task, open: true, hidden: false })
-      .then((updatedTask) => setTask(updatedTask))
+    updateTask(task.id, { ...task, open: true })
+      .then((updatedTask) => {
+        setTask(updatedTask);
+        updateTaskList();
+      })
       .catch(({ response }) => error("Can't open task", response.data))
       .finally(() => setTaskStatusLoading(false));
   }, [task]);
-
-  const handleHide = useCallback(() => {
-    const hideDelay = 3000;
-    const progressFreq = 10;
-
-    setHideTimeoutId(
-      setTimeout(() => {
-        updateTask(task.id, { ...task, hidden: true });
-        updateTaskList();
-        setHideTimeoutId(null);
-      }, hideDelay)
-    );
-    const hideStartDate = Date.now();
-    const hideIntervalId = setInterval(() => {
-      const diff = moment(Date.now()).diff(hideStartDate, "milliseconds");
-      const progressValue = Math.floor((diff / hideDelay) * 100);
-      setHideTimeout(progressValue);
-
-      if (diff > hideDelay) {
-        clearInterval(hideIntervalId);
-        setHideTimeout(0);
-      }
-    }, progressFreq);
-  }, [task]);
-  const completeHide = useCallback(() => {
-    if (hideTimeoutId !== null) clearTimeout(hideTimeoutId);
-    setHideTimeoutId(null);
-    setHideTimeout(0);
-
-    updateTask(task.id, { ...task, hidden: true });
-    updateTaskList();
-  }, [task]);
-  const cancelHide = useCallback(() => {
-    if (hideTimeoutId !== null) clearTimeout(hideTimeoutId);
-    setHideTimeoutId(null);
-
-    setHideTimeout(0);
-  }, [hideTimeoutId]);
 
   const dateToJsFormat = useCallback(
     (date: number) => {
@@ -134,7 +88,7 @@ export function Task({
   return (
     <Box margin="1">
       <Stack>
-        <Collapse in={hideTimeoutId === null}>
+        <Collapse>
           <HStack justifyContent="space-between">
             <Input
               flex="1"
@@ -161,17 +115,6 @@ export function Task({
               </Button>
             )}
           </HStack>
-        </Collapse>
-        <Collapse in={hideTimeoutId !== null}>
-          <Stack>
-            <Text>Task will be hidden</Text>
-            <Progress value={hideTimeout} size="xs" isAnimated />
-            <ButtonGroup flex="1" justifyContent="space-between">
-              <Button onClick={handleCancelClose}>Cancel</Button>
-              <Button onClick={cancelHide}>Keep</Button>
-              <Button onClick={completeHide}>Hide now</Button>
-            </ButtonGroup>
-          </Stack>
         </Collapse>
         <Collapse in={open}>
           <Stack>
@@ -224,17 +167,24 @@ export function Task({
             <ButtonGroup justifyContent="space-between">
               <Collapse in={!task.schedule_date}>
                 <Button
+                  warningMessage="This feature is'n release now"
                   onClick={() => handleUpdate("schedule_date", Date.now())}
                 >
                   Schedule
                 </Button>
               </Collapse>
               <Collapse in={!task.due_date}>
-                <Button onClick={() => handleUpdate("due_date", Date.now())}>
+                <Button
+                  warningMessage="This feature is'n release now"
+                  onClick={() => handleUpdate("due_date", Date.now())}
+                >
                   Due date
                 </Button>
               </Collapse>
-              <Button onClick={() => deleteTask(task.id).then(updateTaskList)}>
+              <Button
+                warningMessage="It's better to do something than to do nothing"
+                onClick={() => deleteTask(task.id).then(updateTaskList)}
+              >
                 Hang up
               </Button>
             </ButtonGroup>
