@@ -75,7 +75,8 @@ const Profile = (): JSX.Element => {
         <InputGroup>
           <InputLeftAddon>
             <Icon as={TelegramIcon} mr="1" />
-            Chat id</InputLeftAddon>
+            Chat id
+          </InputLeftAddon>
           <Input
             value={user.telegram_bot_chat_id}
             onChange={({ target }) => {
