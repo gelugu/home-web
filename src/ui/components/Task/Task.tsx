@@ -20,6 +20,7 @@ import { TaskProps } from "./Task.props";
 import { useApi } from "../../../app/hooks";
 import { AppContext } from "../../../app/context";
 import { Button } from "../common/Button";
+import { taskDueIncrement, taskScheduleIncrement } from "../../../app/config";
 
 export function Task({
   task: propTask,
@@ -132,8 +133,14 @@ export function Task({
                   <Input
                     type="datetime-local"
                     value={dateToJsFormat(task.due_date)}
+                    min={dateToJsFormat(Date.now())}
                     onChange={(e) =>
-                      handleUpdate("due_date", e.currentTarget.valueAsNumber)
+                      handleUpdate(
+                        "due_date",
+                        moment(e.currentTarget.value, moment.ISO_8601)
+                          .toDate()
+                          .getTime()
+                      )
                     }
                   />
                 </InputGroup>
@@ -152,7 +159,9 @@ export function Task({
                     onChange={(e) =>
                       handleUpdate(
                         "schedule_date",
-                        e.currentTarget.valueAsNumber
+                        moment(e.currentTarget.value, moment.ISO_8601)
+                          .toDate()
+                          .getTime()
                       )
                     }
                   />
@@ -166,7 +175,12 @@ export function Task({
               <Collapse in={!task.schedule_date}>
                 <Button
                   warningMessage="This feature is'n release now"
-                  onClick={() => handleUpdate("schedule_date", Date.now())}
+                  onClick={() =>
+                    handleUpdate(
+                      "schedule_date",
+                      Date.now() + taskScheduleIncrement
+                    )
+                  }
                 >
                   Schedule
                 </Button>
@@ -174,7 +188,9 @@ export function Task({
               <Collapse in={!task.due_date}>
                 <Button
                   warningMessage="This feature is'n release now"
-                  onClick={() => handleUpdate("due_date", Date.now())}
+                  onClick={() =>
+                    handleUpdate("due_date", Date.now() + taskDueIncrement)
+                  }
                 >
                   Due date
                 </Button>
