@@ -15,6 +15,8 @@ export const apiRoutes = {
   loginPattern: "/regex/login",
   passwordPattern: "/regex/password",
 
+  profile: "/profile",
+
   authStatus: "/auth/status",
   signup: "/auth/signup",
   signinPassword: "/auth/signin/password",

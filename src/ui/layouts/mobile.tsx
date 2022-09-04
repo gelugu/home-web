@@ -2,14 +2,16 @@ import {
   Button,
   ButtonGroup,
   Collapse,
-  Divider,
   Grid,
   GridItem,
+  HStack,
   Icon,
-  Stack,
 } from "@chakra-ui/react";
+import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
-import { TaskIcon } from "../icons";
+import { routes } from "../../app/config";
+import { useApi } from "../../app/hooks";
+import { LogoutIcon, ProfileIcon, TaskIcon } from "../icons";
 
 interface MobileLayoutProps {
   children: ReactNode;
@@ -17,6 +19,9 @@ interface MobileLayoutProps {
 
 export function MobileLayout({ children }: MobileLayoutProps): JSX.Element {
   const [openTasks, setOpenTasks] = useState(true);
+  const { push } = useRouter();
+  const { logout } = useApi();
+
   return (
     <Grid
       h={`${document.documentElement.clientHeight}px`}
@@ -28,14 +33,23 @@ export function MobileLayout({ children }: MobileLayoutProps): JSX.Element {
       alignItems="flex-end"
     >
       <GridItem area="nav">
-        <Stack>
-          <Divider />
+        <HStack>
+          <ButtonGroup flex="1" justifyContent="space-around">
+            <Button onClick={() => push(routes.profile)}>
+              <Icon as={ProfileIcon} />
+            </Button>
+          </ButtonGroup>
           <ButtonGroup flex="1" justifyContent="space-around">
             <Button onClick={() => setOpenTasks(!openTasks)}>
               <Icon as={TaskIcon} />
             </Button>
           </ButtonGroup>
-        </Stack>
+          <ButtonGroup flex="1" justifyContent="space-around">
+            <Button onClick={logout}>
+              <Icon as={LogoutIcon} />
+            </Button>
+          </ButtonGroup>
+        </HStack>
       </GridItem>
       <Collapse in={openTasks}>
         <GridItem area="tasks">{children}</GridItem>

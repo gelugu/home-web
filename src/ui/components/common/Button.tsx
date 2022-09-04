@@ -19,7 +19,11 @@ export const Button = (props: ButtonProps) => {
 
   return (
     <>
-      <ChakraButton {...props} onClick={warningMessage ? onOpen : onClick}>
+      <ChakraButton
+        loadingText="In progress"
+        {...props}
+        onClick={warningMessage ? onOpen : onClick}
+      >
         {children}
       </ChakraButton>
 
@@ -35,18 +39,18 @@ export const Button = (props: ButtonProps) => {
 
               <AlertDialogFooter>
                 <ButtonGroup>
-                <ChakraButton ref={cancelRef} onClick={onClose}>
-                  Cancel
-                </ChakraButton>
-                <ChakraButton
-                  colorScheme="red"
-                  onClick={(e) => {
-                    onClick(e);
-                    onClose();
-                  }}
-                >
-                  OK
-                </ChakraButton>
+                  <ChakraButton ref={cancelRef} onClick={onClose}>
+                    Cancel
+                  </ChakraButton>
+                  <ChakraButton
+                    colorScheme="red"
+                    onClick={(e) => {
+                      onClick(e);
+                      onClose();
+                    }}
+                  >
+                    OK
+                  </ChakraButton>
                 </ButtonGroup>
               </AlertDialogFooter>
             </AlertDialogContent>

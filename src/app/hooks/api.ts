@@ -1,6 +1,13 @@
-import { apiRoutes } from "../config";
+import { apiRoutes, routes } from "../config";
 
-import { SignUpDto, Task, User } from "../interfaces";
+import {
+  emptyProfile,
+  SignUpDto,
+  Task,
+  UpdateUserDTO,
+  User,
+  UserProfile,
+} from "../interfaces";
 import {
   LoginCodeDto,
   LoginResponseDto,
@@ -11,10 +18,12 @@ import {
 import { useRequest } from ".";
 import { AppContext } from "../context";
 import { useContext } from "react";
+import { useRouter } from "next/router";
 
 export const useApi = () => {
   const { error } = useContext(AppContext);
   const { get, post, put, remove } = useRequest();
+  const { push } = useRouter();
 
   /**
    * Root
@@ -46,6 +55,34 @@ export const useApi = () => {
       .data as unknown as LoginResponseDto;
   const status = async (): Promise<string> =>
     (await get<string>(apiRoutes.authStatus)).data;
+
+  const logout = () => {
+    localStorage.removeItem("token");
+    push(routes.signin);
+  };
+
+  /**
+   * Users
+   */
+  const getProfile = async (): Promise<UserProfile> => {
+    try {
+      return (await get<UserProfile>(apiRoutes.profile)).data;
+    } catch ({ response }) {
+      error("Can't load profile", response.data);
+      return emptyProfile;
+    }
+  };
+  const updateProfile = async (
+    profile: UpdateUserDTO
+  ): Promise<UserProfile> => {
+    try {
+      return (await put<UpdateUserDTO>(apiRoutes.profile, profile))
+        .data as unknown as UserProfile;
+    } catch ({ response }) {
+      error("Can't update profile", response.data);
+      return emptyProfile;
+    }
+  };
 
   /**
    * Tasks
@@ -103,6 +140,9 @@ export const useApi = () => {
     sendCode,
     loginWithCode,
     loginWithPassword,
+    logout,
+    getProfile,
+    updateProfile,
     createTask,
     updateTask,
     deleteTask,
