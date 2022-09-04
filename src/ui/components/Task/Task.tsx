@@ -88,34 +88,32 @@ export function Task({
   return (
     <Box margin="1">
       <Stack>
-        <Collapse>
-          <HStack justifyContent="space-between">
-            <Input
-              flex="1"
-              variant="filled"
-              value={task.name}
-              onChange={(e) => handleUpdate("name", e.target.value)}
-              isDisabled={!task.open}
-            />
-            <Button
-              isLoading={taskStatusLoading}
-              onClick={task.open ? handleClose : handleOpen}
-            >
-              {task.open ? <Icon as={DoneIcon} /> : "Open"}
+        <HStack justifyContent="space-between">
+          <Input
+            flex="1"
+            variant="filled"
+            value={task.name}
+            onChange={(e) => handleUpdate("name", e.target.value)}
+            isDisabled={!task.open}
+          />
+          <Button
+            isLoading={taskStatusLoading}
+            onClick={task.open ? handleClose : handleOpen}
+          >
+            {task.open ? <Icon as={DoneIcon} /> : "Open"}
+          </Button>
+          {task.open && (
+            <Button onClick={() => setOpen(!open)}>
+              <Icon
+                as={ArrowDownIcon}
+                sx={{
+                  transform: open ? "rotate(0.5turn)" : "",
+                  transition: "transform 200ms",
+                }}
+              />
             </Button>
-            {task.open && (
-              <Button onClick={() => setOpen(!open)}>
-                <Icon
-                  as={ArrowDownIcon}
-                  sx={{
-                    transform: open ? "rotate(0.5turn)" : "",
-                    transition: "transform 200ms",
-                  }}
-                />
-              </Button>
-            )}
-          </HStack>
-        </Collapse>
+          )}
+        </HStack>
         <Collapse in={open}>
           <Stack>
             <Textarea
