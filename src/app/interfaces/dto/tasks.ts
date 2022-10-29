@@ -1,5 +1,6 @@
 export interface CreateTaskDto {
   name: string;
+  track_id: string;
   description?: string;
   parent_id?: string;
   due_date?: number;

@@ -20,7 +20,7 @@ import { Task } from "../../../app/interfaces";
 import { NewTask } from "../NewTask/NewTask";
 import { SearchIcon } from "../../icons";
 
-export function Tasks(): JSX.Element {
+export function Tasks({ trackId }: TasksProps): JSX.Element {
   const { getTasks } = useApi();
 
   const [loading, setLoading] = useState(true);
@@ -31,13 +31,13 @@ export function Tasks(): JSX.Element {
   const [searchQuery, setSearchQuery] = useState("");
 
   const fetchTasks = useCallback(async () => {
-    setTasks(await getTasks());
-  }, []);
+    setTasks(await getTasks(trackId));
+  }, [trackId]);
 
   useEffect(() => {
     setLoading(true);
     fetchTasks().finally(() => setLoading(false));
-  }, []);
+  }, [trackId]);
 
   const getTasksComponents = useCallback(() => {
     return tasks
@@ -79,10 +79,14 @@ export function Tasks(): JSX.Element {
             <Button onClick={() => setShowCompleted(!showCompleted)}>
               {showCompleted ? "Hide completed" : "Show completed"}
             </Button>
-            <NewTask updateTaskList={fetchTasks} />
+            <NewTask updateTaskList={fetchTasks} trackId={trackId} />
           </HStack>
         </>
       )}
     </Stack>
   );
+}
+
+interface TasksProps {
+  trackId: string;
 }

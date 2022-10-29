@@ -12,9 +12,9 @@ jobs:
 
     steps:
     - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file cicd/Dockerfile --tag gelugu/home-web:1.0.0
     - name: Docker login
       run: docker login -u gelugu -p ${{secrets.DOCKER_HUB_TOKEN}}
+    - name: Build the Docker image
+      run: make docker-build
     - name: Push the Docker image
-      run: docker push gelugu/home-web:1.0.0
+      run: make docker-push

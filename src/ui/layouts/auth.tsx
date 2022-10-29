@@ -6,14 +6,13 @@ import {
   useState,
 } from "react";
 import { useRouter } from "next/router";
-import { Center, CircularProgress, useMediaQuery } from "@chakra-ui/react";
+import { Center, CircularProgress } from "@chakra-ui/react";
 
 import { useApi } from "../../app/hooks";
 import { AppContext } from "../../app/context";
-import { mobileScreen, routes } from "../../app/config";
+import { routes } from "../../app/config";
 
 const AuthLayout = ({ children }: AuthLayoutProps): JSX.Element => {
-  const [isMobile] = useMediaQuery(mobileScreen);
   const { status } = useApi();
   const { error, setToken, token } = useContext(AppContext);
   const { push, asPath } = useRouter();

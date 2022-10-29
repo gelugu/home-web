@@ -25,4 +25,5 @@ export const apiRoutes = {
   sendCode: "/send-code",
 
   tasks: "/tasks",
+  tracks: "/tracks",
 };

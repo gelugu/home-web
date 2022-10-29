@@ -1,6 +1,6 @@
 import { useMediaQuery } from "@chakra-ui/react";
 import { mobileScreen } from "../src/app/config";
-import { Tasks } from "../src/ui/components";
+import { Tracks } from "../src/ui/components/Tracks/Tracks";
 import { DesktopLayout, MobileLayout, withAuth } from "../src/ui/layouts";
 
 function Home(): JSX.Element {
@@ -9,9 +9,9 @@ function Home(): JSX.Element {
   return (
     <>
       {isMobile ? (
-        <MobileLayout children={<Tasks />} />
+        <MobileLayout children={<Tracks />} />
       ) : (
-        <DesktopLayout children={<Tasks />} />
+        <DesktopLayout children={<Tracks />} />
       )}
     </>
   );

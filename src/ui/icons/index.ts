@@ -12,3 +12,5 @@ export { MdLogout as LogoutIcon } from "react-icons/md";
 export { CgProfile as ProfileIcon } from "react-icons/cg";
 export { BiBell as AlarmIcon } from "react-icons/bi";
 export { FaFlagCheckered as FinishIcon } from "react-icons/fa";
+export { FaProjectDiagram as ProjectIcon } from "react-icons/fa";
+export { MdOutlineCreateNewFolder as CreateProjectIcon } from "react-icons/md";

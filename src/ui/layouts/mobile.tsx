@@ -1,16 +1,15 @@
 import {
-  Button,
   ButtonGroup,
   Collapse,
   Grid,
   GridItem,
   HStack,
-  Icon,
+  IconButton,
+  useDisclosure,
 } from "@chakra-ui/react";
-import { useRouter } from "next/router";
 import { ReactNode, useState } from "react";
-import { routes } from "../../app/config";
 import { useApi } from "../../app/hooks";
+import { Profile } from "../components/Profile";
 import { LogoutIcon, ProfileIcon, TaskIcon } from "../icons";
 
 interface MobileLayoutProps {
@@ -18,8 +17,8 @@ interface MobileLayoutProps {
 }
 
 export function MobileLayout({ children }: MobileLayoutProps): JSX.Element {
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const [openTasks, setOpenTasks] = useState(true);
-  const { push } = useRouter();
   const { logout } = useApi();
 
   return (
@@ -35,19 +34,26 @@ export function MobileLayout({ children }: MobileLayoutProps): JSX.Element {
       <GridItem area="nav">
         <HStack>
           <ButtonGroup flex="1" justifyContent="space-around">
-            <Button onClick={() => push(routes.profile)}>
-              <Icon as={ProfileIcon} />
-            </Button>
+            <IconButton
+              onClick={onOpen}
+              aria-label="Profile"
+              icon={<ProfileIcon />}
+            />
+          </ButtonGroup>
+          <Profile isOpen={isOpen} onClose={onClose} />
+          <ButtonGroup flex="1" justifyContent="space-around">
+            <IconButton
+              onClick={() => setOpenTasks(!openTasks)}
+              aria-label={openTasks ? "Close tasks" : "Open tasks"}
+              icon={<TaskIcon />}
+            />
           </ButtonGroup>
           <ButtonGroup flex="1" justifyContent="space-around">
-            <Button onClick={() => setOpenTasks(!openTasks)}>
-              <Icon as={TaskIcon} />
-            </Button>
-          </ButtonGroup>
-          <ButtonGroup flex="1" justifyContent="space-around">
-            <Button onClick={logout}>
-              <Icon as={LogoutIcon} />
-            </Button>
+            <IconButton
+              onClick={logout}
+              aria-label="Log out"
+              icon={<LogoutIcon />}
+            />
           </ButtonGroup>
         </HStack>
       </GridItem>

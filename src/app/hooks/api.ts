@@ -1,9 +1,12 @@
 import { apiRoutes, routes } from "../config";
 
 import {
+  CreateTrackDto,
   emptyProfile,
   SignUpDto,
   Task,
+  Track,
+  UpdateTrackDto,
   UpdateUserDTO,
   User,
   UserProfile,
@@ -87,9 +90,9 @@ export const useApi = () => {
   /**
    * Tasks
    */
-  const getTasks = async (): Promise<Task[]> => {
+  const getTasks = async (trackId: string): Promise<Task[]> => {
     try {
-      return (await get<Task[]>(apiRoutes.tasks)).data;
+      return (await get<Task[]>(apiRoutes.tasks, `track=${trackId}`)).data;
     } catch ({ response }) {
       error("Can't load tasks", response.data);
       return [];
@@ -132,6 +135,50 @@ export const useApi = () => {
     }
   };
 
+  /**
+   * Tracks
+   */
+  const getTracks = async (): Promise<Track[]> => {
+    try {
+      return (await get<Track[]>(apiRoutes.tracks)).data;
+    } catch ({ response }) {
+      error("Can't load tracks", response.data);
+      return [];
+    }
+  };
+  const getTrack = async (id: string): Promise<Track> => {
+    try {
+      const task = await get<Track>(`${apiRoutes.tracks}/${id}`);
+      return task.data;
+    } catch ({ response }) {
+      error("Can't load track", response.data);
+    }
+  };
+  const createTrack = async (body: CreateTrackDto): Promise<Track> => {
+    try {
+      const track = await post<CreateTrackDto>(apiRoutes.tracks, body);
+      return track.data as Track;
+    } catch ({ response }) {
+      error("Can't create track", response.data);
+    }
+  };
+  const updateTrack = async (id: string, body: UpdateTrackDto) => {
+    try {
+      const task = await put<UpdateTrackDto>(`${apiRoutes.tracks}/${id}`, body);
+      return task.data as Track;
+    } catch ({ response }) {
+      error("Can't update track", response.data);
+    }
+  };
+  const deleteTrack = async (id: string): Promise<Track> => {
+    try {
+      const task = await remove<Track>(`${apiRoutes.tracks}/${id}`);
+      return task.data as Track;
+    } catch ({ response }) {
+      error("Can't update track", response.data);
+    }
+  };
+
   return {
     getLoginPattern,
     getPasswordPattern,
@@ -148,5 +195,10 @@ export const useApi = () => {
     deleteTask,
     getTasks,
     getTask,
+    getTrack,
+    getTracks,
+    createTrack,
+    updateTrack,
+    deleteTrack
   };
 };

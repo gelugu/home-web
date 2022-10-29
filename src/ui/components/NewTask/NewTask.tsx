@@ -12,7 +12,10 @@ import { CreateTaskDto } from "../../../app/interfaces";
 import { useApi } from "../../../app/hooks";
 import { NewTaskProps } from "./NewTask.props";
 
-export function NewTask({ updateTaskList }: NewTaskProps): JSX.Element {
+export function NewTask({
+  updateTaskList,
+  trackId,
+}: NewTaskProps): JSX.Element {
   const { createTask } = useApi();
 
   const [open, setOpen] = useState(false);
@@ -21,6 +24,7 @@ export function NewTask({ updateTaskList }: NewTaskProps): JSX.Element {
   const [task, setTask] = useState<CreateTaskDto>({
     name: "",
     description: "",
+    track_id: trackId,
   });
 
   return (
@@ -44,7 +48,7 @@ export function NewTask({ updateTaskList }: NewTaskProps): JSX.Element {
                 setLoading(true);
                 createTask(task)
                   .then(() => {
-                    setTask({ name: "", description: "" });
+                    setTask({ name: "", description: "", track_id: trackId });
                     updateTaskList();
                     setOpen(false);
                   })
@@ -55,7 +59,7 @@ export function NewTask({ updateTaskList }: NewTaskProps): JSX.Element {
             </Button>
             <Button
               onClick={() => {
-                setTask({ name: "", description: "" });
+                setTask({ name: "", description: "", track_id: trackId });
                 setOpen(false);
               }}
             >

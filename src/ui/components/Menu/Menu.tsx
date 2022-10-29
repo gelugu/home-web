@@ -1,26 +1,28 @@
-import { Button, ButtonGroup, Stack } from "@chakra-ui/react";
-import { useRouter } from "next/router";
-import { routes } from "../../../app/config";
+import {
+  Button,
+  ButtonGroup,
+  Stack,
+  useDisclosure,
+} from "@chakra-ui/react";
 import { useApi } from "../../../app/hooks";
+import { LogoutIcon, ProfileIcon } from "../../icons";
+import { Profile } from "../Profile";
 
 export const Menu = () => {
-  const { push } = useRouter();
+  const { isOpen, onOpen, onClose } = useDisclosure();
   const { logout } = useApi();
 
   return (
-    <Stack h="100%">
-      <ButtonGroup flex="1">
-        <Button
-          flex="1"
-          onClick={() => {
-            push(routes.profile);
-          }}
-        >
+    <Stack h="100%" justifyContent="flex-end">
+      <ButtonGroup>
+        <Button onClick={onOpen} leftIcon={<ProfileIcon />}>
           Profile
         </Button>
       </ButtonGroup>
-      <ButtonGroup justifySelf="flex-end">
-        <Button flex="1" onClick={logout}>
+      <Profile isOpen={isOpen} onClose={onClose} />
+
+      <ButtonGroup>
+        <Button onClick={logout} leftIcon={<LogoutIcon />}>
           Logout
         </Button>
       </ButtonGroup>
