@@ -11,8 +11,6 @@ import { Center, CircularProgress, useMediaQuery } from "@chakra-ui/react";
 import { useApi } from "../../app/hooks";
 import { AppContext } from "../../app/context";
 import { mobileScreen, routes } from "../../app/config";
-import { MobileLayout } from ".";
-import { DesktopLayout } from ".";
 
 const AuthLayout = ({ children }: AuthLayoutProps): JSX.Element => {
   const [isMobile] = useMediaQuery(mobileScreen);
@@ -39,11 +37,7 @@ const AuthLayout = ({ children }: AuthLayoutProps): JSX.Element => {
   if (loading) {
     return (
       <Center h="100vh">
-        {isMobile ? (
-          <MobileLayout children={<CircularProgress isIndeterminate />} />
-        ) : (
-          <DesktopLayout children={<CircularProgress isIndeterminate />} />
-        )}
+        <CircularProgress isIndeterminate />
       </Center>
     );
   } else {
@@ -60,7 +54,7 @@ export const withAuth = <T extends Record<string, unknown>>(
 ) => {
   return (props: T): JSX.Element => (
     <AuthLayout>
-      <Component {...props}></Component>
+      <Component {...props} />
     </AuthLayout>
   );
 };
