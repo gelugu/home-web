@@ -1,15 +1,16 @@
-FROM node:14-stretch-slim
+FROM node:16.15.0-alpine as builder
 
 WORKDIR /app
 
 COPY package*.json ./
-RUN npm ci
+RUN npm install
 
 COPY . .
 
-ENV NODE_ENV production
 RUN npm run build
+RUN npm run export
 
-EXPOSE 3000
+FROM nginx:1.21.6
 
-CMD [ "npm", "start" ]
+COPY --from=builder /app/out /usr/share/nginx/html
+COPY --from=builder /app/cicd/nginx.conf /etc/nginx/nginx.conf
