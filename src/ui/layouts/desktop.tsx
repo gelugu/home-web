@@ -1,6 +1,7 @@
 import { Grid, GridItem } from "@chakra-ui/react";
 import { ReactNode } from "react";
 import { Menu } from "../components";
+import { Dashboard } from "../components/Dashboard";
 
 interface DesktopLayoutProps {
   children: ReactNode;
@@ -18,7 +19,9 @@ export function DesktopLayout({ children }: DesktopLayoutProps): JSX.Element {
       <GridItem area="nav">
         <Menu />
       </GridItem>
-      <GridItem area="main"></GridItem>
+      <GridItem area="main">
+        <Dashboard />
+      </GridItem>
       <GridItem area="tasks">{children}</GridItem>
     </Grid>
   );

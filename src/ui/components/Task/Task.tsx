@@ -24,7 +24,7 @@ import {
 import { Task } from "../../../app/interfaces";
 import { TaskProps } from "./Task.props";
 import { useApi } from "../../../app/hooks";
-import { AppContext } from "../../../app/context";
+import { AppContext, TracksContext } from "../../../app/context";
 import { Button } from "../common/Button";
 import { taskDueIncrement, taskScheduleIncrement } from "../../../app/config";
 
@@ -34,6 +34,7 @@ export function Task({
 }: TaskProps): JSX.Element {
   const { updateTask, deleteTask } = useApi();
   const { error } = useContext(AppContext);
+  const { fetchTasks } = useContext(TracksContext);
 
   const [task, setTask] = useState<Task>(propTask);
 
@@ -69,6 +70,7 @@ export function Task({
       .then((updatedTask) => {
         setTask(updatedTask);
         updateTaskList();
+        fetchTasks();
       })
       .catch(({ response }) => error("Can't close task", response.data));
   }, [task]);
@@ -80,6 +82,7 @@ export function Task({
       .then((updatedTask) => {
         setTask(updatedTask);
         updateTaskList();
+        fetchTasks();
       })
       .catch(({ response }) => error("Can't open task", response.data))
       .finally(() => setTaskStatusLoading(false));

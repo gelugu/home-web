@@ -3,23 +3,17 @@ import { ToastId, useMediaQuery, useToast } from "@chakra-ui/react";
 import { mobileScreen } from "../config";
 
 export interface IAppContext {
-  token: string;
-  setToken: (token: string) => void;
-  error: (title: string, description?: string) => ToastId;
-  success: (title: string, description?: string) => ToastId;
+  error: (title: string, description?: string, duration?: number) => ToastId;
+  success: (title: string, description?: string, duration?: number) => ToastId;
 }
 
 export const AppContext = createContext<IAppContext>({
-  token: "",
-  setToken: () => ({}),
-  error: () => "",
-  success: () => "",
+  error: () => null,
+  success: () => null,
 });
 
 export const AppContextProvider = ({
   children,
-  token,
-  setToken,
 }: PropsWithChildren<IAppContext>): JSX.Element => {
   const toast = useToast();
   const [isMobile] = useMediaQuery(mobileScreen);
@@ -32,7 +26,7 @@ export const AppContextProvider = ({
         status: "error",
         duration,
         isClosable: true,
-        position: isMobile ? "top-left" : "bottom-left"
+        position: isMobile ? "top-left" : "bottom-left",
       }),
     []
   );
@@ -52,8 +46,6 @@ export const AppContextProvider = ({
   return (
     <AppContext.Provider
       value={{
-        token,
-        setToken,
         error,
         success,
       }}

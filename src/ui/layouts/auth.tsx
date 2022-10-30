@@ -9,12 +9,13 @@ import { useRouter } from "next/router";
 import { Center, CircularProgress } from "@chakra-ui/react";
 
 import { useApi } from "../../app/hooks";
-import { AppContext } from "../../app/context";
+import { AuthContext, AppContext } from "../../app/context";
 import { routes } from "../../app/config";
 
 const AuthLayout = ({ children }: AuthLayoutProps): JSX.Element => {
   const { status } = useApi();
-  const { error, setToken, token } = useContext(AppContext);
+  const { setToken, token } = useContext(AuthContext);
+  const { error } = useContext(AppContext);
   const { push, asPath } = useRouter();
 
   const [loading, setLoading] = useState(true);

@@ -9,6 +9,7 @@ import {
 } from "@chakra-ui/react";
 import { ReactNode, useState } from "react";
 import { useApi } from "../../app/hooks";
+import { Dashboard } from "../components/Dashboard";
 import { Profile } from "../components/Profile";
 import { LogoutIcon, ProfileIcon, TaskIcon } from "../icons";
 
@@ -26,11 +27,15 @@ export function MobileLayout({ children }: MobileLayoutProps): JSX.Element {
       h={`${document.documentElement.clientHeight}px`}
       gap="1"
       p="1"
-      templateAreas={`"tasks"
+      templateAreas={`"dashboard"
+                      "tasks"
                       "nav"`}
-      gridTemplateRows="1fr auto"
+      gridTemplateRows="auto 1fr auto"
       alignItems="flex-end"
     >
+      <GridItem area="dashboard">
+      <Dashboard />
+      </GridItem>
       <GridItem area="nav">
         <HStack>
           <ButtonGroup flex="1" justifyContent="space-around">

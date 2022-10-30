@@ -29,12 +29,13 @@ import {
 
 import { useApi } from "../../src/app/hooks";
 import { mobileScreen, routes } from "../../src/app/config";
-import { AppContext } from "../../src/app/context";
+import { AuthContext, AppContext } from "../../src/app/context";
 
 export default function SignIn(): JSX.Element {
   const [isMobile] = useMediaQuery(mobileScreen);
   const { push } = useRouter();
-  const { setToken, error } = useContext(AppContext);
+  const { setToken } = useContext(AuthContext);
+  const { error } = useContext(AppContext);
   const { sendCode, loginWithCode, loginWithPassword } = useApi();
 
   const [loading, setLoading] = useState(false);
@@ -143,9 +144,7 @@ export default function SignIn(): JSX.Element {
                   />
                 </InputGroup>
                 <ButtonGroup justifyContent="space-between">
-                  <Button onClick={() => push(routes.signup)}>
-                    Sign Up
-                  </Button>
+                  <Button onClick={() => push(routes.signup)}>Sign Up</Button>
                   <Button
                     onClick={() => {
                       loginWithPasswordHandler();
@@ -185,9 +184,7 @@ export default function SignIn(): JSX.Element {
                     <Button onClick={sendCodeHandler}>Send code</Button>
                   </HStack>
                   <ButtonGroup justifyContent="flex-start">
-                    <Button onClick={() => push(routes.signup)}>
-                      Sign Up
-                    </Button>
+                    <Button onClick={() => push(routes.signup)}>Sign Up</Button>
                   </ButtonGroup>
                 </Stack>
               </Box>

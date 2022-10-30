@@ -1,9 +1,9 @@
 import axios, { AxiosResponse } from "axios";
 import { useContext } from "react";
-import { AppContext } from "../context";
+import { AuthContext } from "../context";
 
 export const useRequest = () => {
-  const { token } = useContext(AppContext);
+  const { token } = useContext(AuthContext);
   const apiRoute = process.env.NEXT_PUBLIC_API_HOST;
 
   const headers = { Authorization: `Bearer ${token}` };
