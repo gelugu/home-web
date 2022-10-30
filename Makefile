@@ -25,7 +25,7 @@ docker-build:
 docker-push:
 	docker push ${imageName}:${version}
 docker-run:
-	docker run -p 80:80 ${imageName}:${version}
+	docker run -p 3000:80 ${imageName}:${version}
 docker-test: docker-build docker-run
 
 docker-deploy: docker-build docker-push
