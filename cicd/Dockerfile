@@ -11,7 +11,7 @@ ENV NODE_ENV production
 RUN npm run build
 RUN npm run export
 
-FROM nginx:1.21.6
+FROM nginx:1.25.1
 
 EXPOSE 80
 
